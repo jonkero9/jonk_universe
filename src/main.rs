@@ -1,3 +1,5 @@
+use std::time::Instant;
+
 use jonk_utils::Jrand;
 use raylib::prelude::*;
 
@@ -24,9 +26,11 @@ fn main() {
     let global_pos = VecI { x: 0, y: 0 };
 
     while !rl.window_should_close() {
+        let timer = Instant::now();
         let screen_w = rl.get_screen_width();
         let screen_y = rl.get_screen_height();
 
+        handle_key_press(&rl);
         let n_sec_x = screen_w / SEC_SIZE;
         let n_sec_y = screen_y / SEC_SIZE;
 
@@ -56,5 +60,15 @@ fn main() {
                 }
             }
         }
+        let elasped = timer.elapsed();
+        draw.draw_text(
+            &format!("Elasped time: {} seconds", elasped.as_secs_f64()),
+            12,
+            44,
+            32,
+            Color::WHITE,
+        );
     }
 }
+
+fn handle_key_press(rl: &RaylibHandle) {}
