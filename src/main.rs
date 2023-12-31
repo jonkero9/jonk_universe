@@ -1,6 +1,7 @@
 use std::time::Instant;
 
 use jonk_utils::Jrand;
+use raylib::consts::KeyboardKey::*;
 use raylib::prelude::*;
 
 #[derive(Debug)]
@@ -23,16 +24,21 @@ fn main() {
 
     rl.set_target_fps(75);
 
-    let global_pos = VecI { x: 0, y: 0 };
+    let mut global_pos = Vector2 { x: 0., y: 0. };
 
     while !rl.window_should_close() {
         let timer = Instant::now();
         let screen_w = rl.get_screen_width();
         let screen_y = rl.get_screen_height();
 
-        handle_key_press(&rl);
         let n_sec_x = screen_w / SEC_SIZE;
         let n_sec_y = screen_y / SEC_SIZE;
+
+        handle_key_press(
+            &rl,
+            &mut global_pos,
+            SEC_SIZE as f32 * 8. * rl.get_frame_time(),
+        );
 
         let mut draw = rl.begin_drawing(&thread);
         draw.clear_background(Color::BLACK);
@@ -42,8 +48,8 @@ fn main() {
         for y in 0..n_sec_y {
             for x in 0..n_sec_x {
                 let global_sec = VecI {
-                    x: global_pos.x + x,
-                    y: global_pos.y + y,
+                    x: global_pos.x as i32 + x,
+                    y: global_pos.y as i32 + y,
                 };
                 jonk_random.seed = jonk_utils::cantor_hash(global_sec.x, global_sec.y);
                 if jonk_random.rnd_range(0, 20) == 1 {
@@ -71,4 +77,17 @@ fn main() {
     }
 }
 
-fn handle_key_press(rl: &RaylibHandle) {}
+fn handle_key_press(rl: &RaylibHandle, global_pos: &mut Vector2, sensitivity: f32) {
+    if rl.is_key_down(KEY_W) {
+        global_pos.y -= sensitivity;
+    }
+    if rl.is_key_down(KEY_D) {
+        global_pos.x += sensitivity;
+    }
+    if rl.is_key_down(KEY_S) {
+        global_pos.y += sensitivity;
+    }
+    if rl.is_key_down(KEY_A) {
+        global_pos.x -= sensitivity;
+    }
+}
