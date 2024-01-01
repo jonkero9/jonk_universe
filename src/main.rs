@@ -1,7 +1,12 @@
 use jonk_utils::Jrand;
+use model::star_system::StarSystem;
 use raylib::consts::KeyboardKey::*;
+
 use raylib::prelude::*;
+use std::collections::HashMap;
 use std::time::Instant;
+
+pub mod model;
 
 #[derive(Debug)]
 struct VecI {
@@ -28,7 +33,7 @@ static SCREEN_Y: i32 = 640;
 static SEC_SIZE: i32 = 16;
 
 fn main() {
-    let mut jonk_random = Jrand { seed: 0 };
+    let mut jonk_random = Jrand::new();
 
     let (mut rl, thread) = raylib::init()
         .vsync()
@@ -55,8 +60,13 @@ fn main() {
             SEC_SIZE as f32 * 8. * rl.get_frame_time(),
         );
 
+        let mouse_x = rl.get_mouse_x();
+        let mouse_y = rl.get_mouse_y();
+
         let mut draw = rl.begin_drawing(&thread);
         draw.clear_background(Color::BLACK);
+
+        let mut star_map: HashMap<u64, StarSystem> = HashMap::new();
 
         for y in 0..n_sec_y {
             for x in 0..n_sec_x {
@@ -64,8 +74,11 @@ fn main() {
                     x: global_pos.x as i32 + x,
                     y: global_pos.y as i32 + y,
                 };
-                jonk_random.seed = jonk_utils::cantor_hash(global_sec.x, global_sec.y);
+                let hash_key = jonk_utils::cantor_hash(global_sec.x, global_sec.y);
+                jonk_random.seed = hash_key;
+
                 if jonk_random.rnd_range(0, 20) == 1 {
+                    star_map.insert(hash_key, StarSystem::new(global_sec.x, global_sec.y));
                     let sec_to_screen = VecI {
                         x: x * SEC_SIZE,
                         y: y * SEC_SIZE,
@@ -76,18 +89,50 @@ fn main() {
                         6.,
                         COLORS.green,
                     );
+                    if x == mouse_x / SEC_SIZE && y == mouse_y / SEC_SIZE {
+                        if let Some(star) = star_map.get(&jonk_utils::cantor_hash(
+                            mouse_x / SEC_SIZE,
+                            mouse_y / SEC_SIZE,
+                        )) {
+                            draw_lines(
+                                &mut draw,
+                                vec![
+                                    &format!("Radius: {:.2}", star.radius),
+                                    &format!("Luminosity: {:.2} lums", star.luminosity),
+                                    &format!("Temp: {:.2}K", star.surface_temp),
+                                    &format!("Mass: {:.2} Solar masses", star.mass),
+                                    &format!("Planets: {}", star.num_of_planets),
+                                ],
+                                32,
+                                12,
+                                560,
+                            );
+                        }
+                    }
                 }
             }
         }
-        draw.draw_text("Hello, Chat!!!", 12, 12, 32, Color::WHITE);
         let elasped = timer.elapsed().as_secs_f64();
-        draw.draw_text(
-            &format!("run time seconds: {:.6} ", elasped),
-            12,
-            44,
+        draw_lines(
+            &mut draw,
+            vec![
+                "Hello, Chat!!!",
+                &format!("run time seconds: {:.6} ", elasped),
+                &format!("Sector: {}, {}", global_pos.x, global_pos.y),
+            ],
             32,
-            Color::WHITE,
+            12,
+            12,
         );
+    }
+}
+
+fn draw_lines(draw: &mut RaylibDrawHandle, lines: Vec<&str>, f_size: i32, s_x: i32, s_y: i32) {
+    let mut start_y = s_y;
+    draw.draw_rectangle(s_x, start_y, 540, f_size * lines.len() as i32, Color::BLUE);
+    for s in lines {
+        draw.draw_text(s, s_x, start_y, f_size, Color::WHITE);
+        start_y += f_size;
     }
 }
 
