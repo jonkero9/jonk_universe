@@ -1,8 +1,7 @@
-use std::time::Instant;
-
 use jonk_utils::Jrand;
 use raylib::consts::KeyboardKey::*;
 use raylib::prelude::*;
+use std::time::Instant;
 
 #[derive(Debug)]
 struct VecI {
@@ -10,14 +9,30 @@ struct VecI {
     y: i32,
 }
 
+#[derive(Debug)]
+struct Gamecolors {
+    green: Color,
+}
+
+static COLORS: Gamecolors = Gamecolors {
+    green: Color {
+        r: 166,
+        g: 227,
+        b: 161,
+        a: 255,
+    },
+};
+
+static SCREEN_W: i32 = 960;
+static SCREEN_Y: i32 = 640;
+static SEC_SIZE: i32 = 16;
+
 fn main() {
     let mut jonk_random = Jrand { seed: 0 };
-    const SCREEN_W: i32 = 960;
-    const SCREEN_Y: i32 = 640;
-    const SEC_SIZE: i32 = 16;
 
     let (mut rl, thread) = raylib::init()
         .vsync()
+        .resizable()
         .size(SCREEN_W, SCREEN_Y)
         .title("Jspace")
         .build();
@@ -43,8 +58,6 @@ fn main() {
         let mut draw = rl.begin_drawing(&thread);
         draw.clear_background(Color::BLACK);
 
-        draw.draw_text("Hello, Chat!!!", 12, 12, 32, Color::WHITE);
-
         for y in 0..n_sec_y {
             for x in 0..n_sec_x {
                 let global_sec = VecI {
@@ -61,14 +74,15 @@ fn main() {
                         sec_to_screen.x + (SEC_SIZE / 2),
                         sec_to_screen.y + (SEC_SIZE / 2),
                         6.,
-                        Color::GREEN,
+                        COLORS.green,
                     );
                 }
             }
         }
-        let elasped = timer.elapsed();
+        draw.draw_text("Hello, Chat!!!", 12, 12, 32, Color::WHITE);
+        let elasped = timer.elapsed().as_secs_f64();
         draw.draw_text(
-            &format!("Elasped time: {} seconds", elasped.as_secs_f64()),
+            &format!("run time seconds: {:.6} ", elasped),
             12,
             44,
             32,
