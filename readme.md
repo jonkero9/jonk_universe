@@ -1,5 +1,7 @@
 # Todo
 
+- horizontal movement when zoomed in fast
+
 - Finish model 
     - planets
     - life forms

@@ -108,7 +108,8 @@ fn main() {
             &mut draw,
             vec![
                 "Hello, Chat!!!",
-                &format!("run time seconds: {:.6} ", elasped),
+                &format!("run time seconds: {:.6}", elasped),
+                &format!("Zoom: {:.2} ", sec_size),
                 &format!("Sector: {}, {}", global_pos.x, global_pos.y),
             ],
             32,
