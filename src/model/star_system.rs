@@ -1,8 +1,8 @@
 use jonk_utils::Jrand;
 
-#[derive(Debug)]
+#[derive(Debug, Clone, Copy)]
 pub struct StarSystem {
-    ///  radius of the sun between (2000 - 1); 418,000 miles (696,000 kilometers)
+    /// measured in solar radi, radius of the sun between (2000 - 1); 418,000 miles (696,000 kilometers)
     pub radius: f32,
     /// Total amount of energy emitted from a star per second (25 - 1)
     pub luminosity: f32,
@@ -28,3 +28,4 @@ impl StarSystem {
         };
     }
 }
+

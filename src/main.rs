@@ -78,7 +78,8 @@ fn main() {
                 jonk_random.seed = hash_key;
 
                 if jonk_random.rnd_range(0, 20) == 1 {
-                    star_map.insert(hash_key, StarSystem::new(global_sec.x, global_sec.y));
+                    let star = StarSystem::new(global_sec.x, global_sec.y);
+                    star_map.insert(hash_key, star);
                     let sec_to_screen = VecI {
                         x: x * SEC_SIZE,
                         y: y * SEC_SIZE,
@@ -86,7 +87,7 @@ fn main() {
                     draw.draw_circle(
                         sec_to_screen.x + (SEC_SIZE / 2),
                         sec_to_screen.y + (SEC_SIZE / 2),
-                        6.,
+                        (star.radius  / 2000 as f32) * (SEC_SIZE / 2) as f32,
                         COLORS.green,
                     );
                 }
