@@ -17,10 +17,47 @@ struct VecI {
 #[derive(Debug)]
 struct Gamecolors {
     green: Color,
+    blue: Color,
+    white: Color,
+    yellow: Color,
+    orange: Color,
+    red: Color,
 }
 
 static COLORS: Gamecolors = Gamecolors {
     green: Color {
+        r: 166,
+        g: 227,
+        b: 161,
+        a: 255,
+    },
+    blue: Color {
+        r: 137,
+        g: 180,
+        b: 250,
+        a: 255,
+    },
+    white: Color {
+        r: 166,
+        g: 227,
+        b: 161,
+        a: 255,
+    },
+
+    yellow: Color {
+        r: 166,
+        g: 227,
+        b: 161,
+        a: 255,
+    },
+
+    orange: Color {
+        r: 166,
+        g: 227,
+        b: 161,
+        a: 255,
+    },
+    red: Color {
         r: 166,
         g: 227,
         b: 161,
@@ -90,7 +127,10 @@ fn main() {
                         sec_to_screen.x + (sec_size / 2.) as i32,
                         sec_to_screen.y + (sec_size / 2.) as i32,
                         (star.radius / 2000.) * (sec_size / 2.),
-                        COLORS.green,
+                        match jonk_random.rnd_range(0, 2) == 1 {
+                            true => COLORS.green,
+                            false => COLORS.blue,
+                        },
                     );
                 }
             }

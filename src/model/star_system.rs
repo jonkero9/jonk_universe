@@ -6,7 +6,7 @@ pub struct StarSystem {
     pub radius: f32,
     /// Total amount of energy emitted from a star per second (25 - 1)
     pub luminosity: f32,
-    /// Surface temprature in Kelvin (210,000 - 1,000)
+    /// Surface temprature in Kelvin (30,000 - 1,000)
     pub surface_temp: f32,
     /// Solar masses (10000,1);  mass of our sun; 1.99 x 1030 kilograms (330,000 Earth masses)
     pub mass: f32,
@@ -22,10 +22,9 @@ impl StarSystem {
         return StarSystem {
             radius: jonk_random.rnd_range_float(1.0, 2000.0),
             luminosity: jonk_random.rnd_range_float(1.0, 25.0),
-            surface_temp: jonk_random.rnd_range_float(1000.0, 210000.0),
+            surface_temp: jonk_random.rnd_range_float(1000.0, 30000.0),
             mass: jonk_random.rnd_range_float(1.0, 10000.0),
             num_of_planets: jonk_random.rnd_range(1, 12),
         };
     }
 }
-
