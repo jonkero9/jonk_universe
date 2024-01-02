@@ -30,9 +30,9 @@ static COLORS: Gamecolors = Gamecolors {
 
 static SCREEN_W: i32 = 960;
 static SCREEN_Y: i32 = 640;
-static SEC_SIZE: i32 = 16;
 
 fn main() {
+    let mut sec_size: f32 = 16.;
     let mut jonk_random = Jrand::new();
 
     let (mut rl, thread) = raylib::init()
@@ -51,13 +51,15 @@ fn main() {
         let screen_w = rl.get_screen_width();
         let screen_y = rl.get_screen_height();
 
-        let n_sec_x = screen_w / SEC_SIZE;
-        let n_sec_y = screen_y / SEC_SIZE;
+        sec_size = handle_zoom(&rl, sec_size);
+
+        let n_sec_x = screen_w / sec_size as i32;
+        let n_sec_y = screen_y / sec_size as i32;
 
         handle_key_press(
             &rl,
             &mut global_pos,
-            SEC_SIZE as f32 * 8. * rl.get_frame_time(),
+            sec_size as f32 * 8. * rl.get_frame_time(),
         );
 
         let mouse_x = rl.get_mouse_x();
@@ -81,19 +83,26 @@ fn main() {
                     let star = StarSystem::new(global_sec.x, global_sec.y);
                     star_map.insert(hash_key, star);
                     let sec_to_screen = VecI {
-                        x: x * SEC_SIZE,
-                        y: y * SEC_SIZE,
+                        x: x * sec_size as i32,
+                        y: y * sec_size as i32,
                     };
                     draw.draw_circle(
-                        sec_to_screen.x + (SEC_SIZE / 2),
-                        sec_to_screen.y + (SEC_SIZE / 2),
-                        (star.radius / 2000 as f32) * (SEC_SIZE / 2) as f32,
+                        sec_to_screen.x + (sec_size / 2.) as i32,
+                        sec_to_screen.y + (sec_size / 2.) as i32,
+                        (star.radius / 2000.) * (sec_size / 2.),
                         COLORS.green,
                     );
                 }
             }
         }
-        handle_mouse_hover(star_map, &mut global_pos, &mut draw, mouse_x, mouse_y);
+        handle_mouse_hover(
+            star_map,
+            &mut global_pos,
+            &mut draw,
+            mouse_x,
+            mouse_y,
+            sec_size,
+        );
         let elasped = timer.elapsed().as_secs_f64();
         draw_lines(
             &mut draw,
@@ -109,16 +118,28 @@ fn main() {
     }
 }
 
+fn handle_zoom(rl: &RaylibHandle, sec_size: f32) -> f32 {
+    let zoom_sen = sec_size * rl.get_frame_time();
+    if rl.is_key_down(KEY_E) {
+        return sec_size + zoom_sen;
+    }
+    if rl.is_key_down(KEY_Q) {
+        return sec_size - zoom_sen;
+    }
+    return sec_size;
+}
+
 fn handle_mouse_hover(
     star_map: HashMap<u64, StarSystem>,
     global_pos: &mut Vector2,
     draw: &mut RaylibDrawHandle,
     mouse_x: i32,
     mouse_y: i32,
+    sec_size: f32,
 ) {
     if let Some(star) = star_map.get(&jonk_utils::cantor_hash(
-        global_pos.x as i32 + (mouse_x / SEC_SIZE),
-        global_pos.y as i32 + mouse_y / SEC_SIZE,
+        global_pos.x as i32 + (mouse_x / sec_size as i32),
+        global_pos.y as i32 + mouse_y / sec_size as i32,
     )) {
         draw_lines(
             draw,
