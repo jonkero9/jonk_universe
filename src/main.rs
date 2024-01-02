@@ -87,30 +87,13 @@ fn main() {
                     draw.draw_circle(
                         sec_to_screen.x + (SEC_SIZE / 2),
                         sec_to_screen.y + (SEC_SIZE / 2),
-                        (star.radius  / 2000 as f32) * (SEC_SIZE / 2) as f32,
+                        (star.radius / 2000 as f32) * (SEC_SIZE / 2) as f32,
                         COLORS.green,
                     );
                 }
             }
         }
-        if let Some(star) = star_map.get(&jonk_utils::cantor_hash(
-            global_pos.x as i32 + (mouse_x / SEC_SIZE),
-            global_pos.y as i32 + mouse_y / SEC_SIZE,
-        )) {
-            draw_lines(
-                &mut draw,
-                vec![
-                    &format!("Radius: {:.2}", star.radius),
-                    &format!("Luminosity: {:.2} lums", star.luminosity),
-                    &format!("Temp: {:.2}K", star.surface_temp),
-                    &format!("Mass: {:.2} Solar masses", star.mass),
-                    &format!("Planets: {}", star.num_of_planets),
-                ],
-                32,
-                12,
-                160,
-            );
-        }
+        handle_mouse_hover(star_map, &mut global_pos, &mut draw, mouse_x, mouse_y);
         let elasped = timer.elapsed().as_secs_f64();
         draw_lines(
             &mut draw,
@@ -122,6 +105,33 @@ fn main() {
             32,
             12,
             12,
+        );
+    }
+}
+
+fn handle_mouse_hover(
+    star_map: HashMap<u64, StarSystem>,
+    global_pos: &mut Vector2,
+    draw: &mut RaylibDrawHandle,
+    mouse_x: i32,
+    mouse_y: i32,
+) {
+    if let Some(star) = star_map.get(&jonk_utils::cantor_hash(
+        global_pos.x as i32 + (mouse_x / SEC_SIZE),
+        global_pos.y as i32 + mouse_y / SEC_SIZE,
+    )) {
+        draw_lines(
+            draw,
+            vec![
+                &format!("Radius: {:.2}", star.radius),
+                &format!("Luminosity: {:.2} lums", star.luminosity),
+                &format!("Temp: {:.2}K", star.surface_temp),
+                &format!("Mass: {:.2} Solar masses", star.mass),
+                &format!("Planets: {}", star.num_of_planets),
+            ],
+            32,
+            12,
+            160,
         );
     }
 }
