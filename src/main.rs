@@ -38,29 +38,27 @@ static COLORS: Gamecolors = Gamecolors {
         a: 255,
     },
     white: Color {
-        r: 166,
-        g: 227,
-        b: 161,
+        r: 186,
+        g: 194,
+        b: 222,
         a: 255,
     },
-
     yellow: Color {
-        r: 166,
-        g: 227,
-        b: 161,
+        r: 249,
+        g: 226,
+        b: 175,
         a: 255,
     },
-
     orange: Color {
-        r: 166,
-        g: 227,
-        b: 161,
+        r: 243,
+        b: 181,
+        g: 139,
         a: 255,
     },
     red: Color {
-        r: 166,
-        g: 227,
-        b: 161,
+        r: 243,
+        g: 139,
+        b: 168,
         a: 255,
     },
 };
@@ -127,9 +125,13 @@ fn main() {
                         sec_to_screen.x + (sec_size / 2.) as i32,
                         sec_to_screen.y + (sec_size / 2.) as i32,
                         (star.radius / 2000.) * (sec_size / 2.),
-                        match jonk_random.rnd_range(0, 2) == 1 {
-                            true => COLORS.green,
-                            false => COLORS.blue,
+                        match jonk_random.rnd_range(0, 6)  {
+                            0 => COLORS.green,
+                            1 => COLORS.blue,
+                            2 => COLORS.yellow,
+                            3 => COLORS.red,
+                            4 => COLORS.orange,
+                            _ => COLORS.white,
                         },
                     );
                 }
