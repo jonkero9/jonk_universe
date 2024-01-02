@@ -89,28 +89,26 @@ fn main() {
                         6.,
                         COLORS.green,
                     );
-                    if x == mouse_x / SEC_SIZE && y == mouse_y / SEC_SIZE {
-                        if let Some(star) = star_map.get(&jonk_utils::cantor_hash(
-                            mouse_x / SEC_SIZE,
-                            mouse_y / SEC_SIZE,
-                        )) {
-                            draw_lines(
-                                &mut draw,
-                                vec![
-                                    &format!("Radius: {:.2}", star.radius),
-                                    &format!("Luminosity: {:.2} lums", star.luminosity),
-                                    &format!("Temp: {:.2}K", star.surface_temp),
-                                    &format!("Mass: {:.2} Solar masses", star.mass),
-                                    &format!("Planets: {}", star.num_of_planets),
-                                ],
-                                32,
-                                12,
-                                160,
-                            );
-                        }
-                    }
                 }
             }
+        }
+        if let Some(star) = star_map.get(&jonk_utils::cantor_hash(
+            global_pos.x as i32 + (mouse_x / SEC_SIZE),
+            global_pos.y as i32 + mouse_y / SEC_SIZE,
+        )) {
+            draw_lines(
+                &mut draw,
+                vec![
+                    &format!("Radius: {:.2}", star.radius),
+                    &format!("Luminosity: {:.2} lums", star.luminosity),
+                    &format!("Temp: {:.2}K", star.surface_temp),
+                    &format!("Mass: {:.2} Solar masses", star.mass),
+                    &format!("Planets: {}", star.num_of_planets),
+                ],
+                32,
+                12,
+                160,
+            );
         }
         let elasped = timer.elapsed().as_secs_f64();
         draw_lines(
