@@ -125,7 +125,7 @@ fn main() {
                         sec_to_screen.x + (sec_size / 2.) as i32,
                         sec_to_screen.y + (sec_size / 2.) as i32,
                         (star.radius / 2000.) * (sec_size / 2.),
-                        match jonk_random.rnd_range(0, 6)  {
+                        match jonk_random.rnd_range(0, 6) {
                             0 => COLORS.green,
                             1 => COLORS.blue,
                             2 => COLORS.yellow,
@@ -192,6 +192,7 @@ fn handle_mouse_hover(
                 &format!("Temp: {:.2}K", star.surface_temp),
                 &format!("Mass: {:.2} Solar masses", star.mass),
                 &format!("Planets: {}", star.num_of_planets),
+                &format!("Color: {:?}", star.star_color),
             ],
             32,
             12,
