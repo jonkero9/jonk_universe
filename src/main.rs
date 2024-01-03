@@ -16,7 +16,6 @@ struct VecI {
 
 #[derive(Debug)]
 struct Gamecolors {
-    green: Color,
     blue: Color,
     white: Color,
     yellow: Color,
@@ -37,12 +36,6 @@ impl From<StarColor> for Color {
 }
 
 static COLORS: Gamecolors = Gamecolors {
-    green: Color {
-        r: 166,
-        g: 227,
-        b: 161,
-        a: 255,
-    },
     blue: Color {
         r: 137,
         g: 180,
