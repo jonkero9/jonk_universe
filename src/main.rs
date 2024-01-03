@@ -1,5 +1,5 @@
 use jonk_utils::Jrand;
-use model::star_system::StarSystem;
+use model::star_system::{StarColor, StarSystem};
 use raylib::consts::KeyboardKey::*;
 
 use raylib::prelude::*;
@@ -22,6 +22,18 @@ struct Gamecolors {
     yellow: Color,
     orange: Color,
     red: Color,
+}
+
+impl From<StarColor> for Color {
+    fn from(value: StarColor) -> Self {
+        return match value {
+            StarColor::Red => COLORS.red,
+            StarColor::Orange => COLORS.orange,
+            StarColor::Yellow => COLORS.yellow,
+            StarColor::White => COLORS.white,
+            StarColor::Blue => COLORS.blue,
+        };
+    }
 }
 
 static COLORS: Gamecolors = Gamecolors {
@@ -125,14 +137,7 @@ fn main() {
                         sec_to_screen.x + (sec_size / 2.) as i32,
                         sec_to_screen.y + (sec_size / 2.) as i32,
                         (star.radius / 2000.) * (sec_size / 2.),
-                        match jonk_random.rnd_range(0, 6) {
-                            0 => COLORS.green,
-                            1 => COLORS.blue,
-                            2 => COLORS.yellow,
-                            3 => COLORS.red,
-                            4 => COLORS.orange,
-                            _ => COLORS.white,
-                        },
+                        Color::from(star.star_color),
                     );
                 }
             }

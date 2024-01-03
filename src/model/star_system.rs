@@ -1,5 +1,3 @@
-use std::ops::RangeBounds;
-
 use jonk_utils::Jrand;
 
 #[derive(Debug, Clone, Copy)]
@@ -23,6 +21,7 @@ pub struct StarSystem {
     pub mass: f32,
     /// (8, 0)
     pub num_of_planets: u32,
+    /// Star color based of surface temp
     pub star_color: StarColor,
 }
 
