@@ -33,18 +33,15 @@ fn main() {
 
     while !rl.window_should_close() {
         let timer = Instant::now();
-        let screen_w = rl.get_screen_width();
-        let screen_y = rl.get_screen_height();
-
         sec_size = handle_zoom(&rl, sec_size);
 
-        let n_sec_x = screen_w / sec_size as i32;
-        let n_sec_y = screen_y / sec_size as i32;
+        let n_sec_x = rl.get_screen_width() / sec_size as i32;
+        let n_sec_y = rl.get_screen_height() / sec_size as i32;
 
         handle_key_press(
             &rl,
             &mut global_pos,
-            (16. * 8. * rl.get_frame_time()) / (sec_size / 16.),
+            (128. * rl.get_frame_time()) / (sec_size / 16.),
         );
 
         let mouse_x = rl.get_mouse_x();
