@@ -6,14 +6,16 @@ use raylib::consts::KeyboardKey::*;
 use raylib::prelude::*;
 use std::collections::HashMap;
 use std::time::Instant;
+use u_gen::factory;
 
 pub mod game_color;
 pub mod model;
+pub mod u_gen;
 
-#[derive(Debug)]
-struct VecI {
-    x: i32,
-    y: i32,
+#[derive(Debug, Clone, Copy)]
+pub struct VecI {
+    pub x: i32,
+    pub y: i32,
 }
 
 fn main() {
@@ -62,7 +64,7 @@ fn main() {
                 jonk_random.seed = hash_key;
 
                 if jonk_random.rnd_range(0, 20) == 1 {
-                    let star = StarSystem::new(global_sec.x, global_sec.y);
+                    let star = factory::new_star(global_sec.x, global_sec.y);
                     star_map.insert(hash_key, star);
                     let sec_to_screen = VecI {
                         x: x * sec_size as i32,
@@ -133,6 +135,7 @@ fn handle_mouse_hover(
                 &format!("Mass: {:.2} Solar masses", star.mass),
                 &format!("Planets: {}", star.num_of_planets),
                 &format!("Color: {:?}", star.star_color),
+                &format!("location: {}, {}", star.location.x, star.location.y),
             ],
             32,
             12,

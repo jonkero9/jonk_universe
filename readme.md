@@ -1,7 +1,5 @@
 # Todo
 
-- horizontal movement when zoomed in fast
-
 - Finish model 
     - planets
     - life forms
@@ -16,4 +14,3 @@
 
 - move universe gen to in memory`
 
-- decouple model from generator
