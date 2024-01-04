@@ -1,5 +1,8 @@
 use crate::{
-    model::star_system::{StarColor, StarSystem},
+    model::{
+        planet::Planet,
+        star_system::{StarColor, StarSystem},
+    },
     VecI,
 };
 use jonk_utils::Jrand;
@@ -28,5 +31,24 @@ pub fn new_star(star_sector_x: i32, star_sector_y: i32) -> StarSystem {
             x: star_sector_x,
             y: star_sector_y,
         },
+    };
+}
+
+pub fn new_planets(star_sector_x: i32, star_sector_y: i32) -> Planet {
+    let mut jonk_random = Jrand::new();
+    jonk_random.seed = jonk_utils::cantor_hash(star_sector_x, star_sector_y);
+    return Planet {
+        location: VecI {
+            x: star_sector_x,
+            y: star_sector_y,
+        },
+        distance_au: jonk_random.rnd_range_float(0.0044, 5.),
+        radius: jonk_random.rnd_range_float(0.383, 2000000.),
+        rotation: jonk_random.rnd_range(1, 300000),
+        revolution: jonk_random.rnd_range(1, 300000),
+        eccentricity: jonk_random.rnd_range_float(1000., 2000000.),
+        inclination: jonk_random.rnd_range_float(1000., 2000000.),
+        mass: jonk_random.rnd_range_float(1000., 2000000.),
+        density: jonk_random.rnd_range_float(1000., 2000000.),
     };
 }

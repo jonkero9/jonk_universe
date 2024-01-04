@@ -5,6 +5,7 @@
     - life forms
     - moons
     - everythings else in the universe
+    - black holes
 
 - Themeing and color system
 
