@@ -44,7 +44,7 @@ fn main() {
         handle_key_press(
             &rl,
             &mut global_pos,
-            (16. * 8. * rl.get_frame_time()) / (sec_size),
+            (16. * 8. * rl.get_frame_time()) / (sec_size / 16.),
         );
 
         let mouse_x = rl.get_mouse_x();
