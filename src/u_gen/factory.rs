@@ -12,13 +12,11 @@ pub fn new_star(star_sector_x: i32, star_sector_y: i32) -> StarSystem {
     jonk_random.seed = jonk_utils::cantor_hash(star_sector_x, star_sector_y);
 
     let surf_temp = jonk_random.rnd_range_float(700.0, 25001.0);
-
     return StarSystem {
         radius: jonk_random.rnd_range_float(1.0, 2000.0),
         luminosity: jonk_random.rnd_range_float(1.0, 25.0),
         surface_temp: surf_temp,
         mass: jonk_random.rnd_range_float(1.0, 10000.0),
-        num_of_planets: jonk_random.rnd_range(1, 12),
         star_color: match surf_temp {
             x if (10000.0..25001.0).contains(&x) => StarColor::Blue,
             x if (6000.0..10000.0).contains(&x) => StarColor::White,
@@ -31,10 +29,11 @@ pub fn new_star(star_sector_x: i32, star_sector_y: i32) -> StarSystem {
             x: star_sector_x,
             y: star_sector_y,
         },
+        planets: generate_planets(star_sector_x, star_sector_y),
     };
 }
 
-pub fn new_planets(star_sector_x: i32, star_sector_y: i32) -> Planet {
+pub fn new_planet(star_sector_x: i32, star_sector_y: i32) -> Planet {
     let mut jonk_random = Jrand::new();
     jonk_random.seed = jonk_utils::cantor_hash(star_sector_x, star_sector_y);
     return Planet {
@@ -51,4 +50,14 @@ pub fn new_planets(star_sector_x: i32, star_sector_y: i32) -> Planet {
         mass: jonk_random.rnd_range_float(1000., 2000000.),
         density: jonk_random.rnd_range_float(1000., 2000000.),
     };
+}
+
+fn generate_planets(star_sector_x: i32, star_sector_y: i32) -> Vec<Planet> {
+    let mut jonk_random = Jrand::new();
+    let mut return_data: Vec<Planet> = Vec::new();
+    jonk_random.seed = jonk_utils::cantor_hash(star_sector_x, star_sector_y);
+    for _i in 0..jonk_random.rnd_range(0, 13) {
+        return_data.push(new_planet(star_sector_x, star_sector_y));
+    }
+    return return_data;
 }

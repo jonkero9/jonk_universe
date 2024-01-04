@@ -6,7 +6,7 @@ pub struct Planet {
     pub location: VecI,
     /// distance is the semi-major axis in astronomical units (1 A.U. = 1.496 × 108 kilometers);
     pub distance_au: f32,
-    /// radius of the planet in earth radi
+    /// radius of the planet in kilometers
     pub radius: f32,
     /// rotation are the sidereal rotation period and sidereal orbital period in seconds
     pub rotation: u32,

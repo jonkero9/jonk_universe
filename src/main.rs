@@ -65,7 +65,7 @@ fn main() {
 
                 if jonk_random.rnd_range(0, 20) == 1 {
                     let star = factory::new_star(global_sec.x, global_sec.y);
-                    star_map.insert(hash_key, star);
+                    star_map.insert(hash_key, star.clone());
                     let sec_to_screen = VecI {
                         x: x * sec_size as i32,
                         y: y * sec_size as i32,
@@ -136,7 +136,7 @@ fn handle_mouse_hover(
                 &format!("Luminosity: {:.2} lums", star.luminosity),
                 &format!("Temp: {:.2}K", star.surface_temp),
                 &format!("Mass: {:.2} Solar masses", star.mass),
-                &format!("Planets: {}", star.num_of_planets),
+                &format!("Planets: {}", star.planets.len()),
                 &format!("Color: {:?}", star.star_color),
                 &format!("location: {}, {}", star.location.x, star.location.y),
             ],
