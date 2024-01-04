@@ -91,7 +91,7 @@ fn main() {
         draw_lines(
             &mut draw,
             vec![
-                "Hello, Chat!!!",
+                &format!("nsecs: {}, {}", n_sec_x, n_sec_y),
                 &format!("run time seconds: {:.6}", elasped),
                 &format!("Zoom: {:.2} ", sec_size),
                 &format!("Sector: {}, {}", global_pos.x, global_pos.y),
@@ -109,7 +109,10 @@ fn handle_zoom(rl: &RaylibHandle, sec_size: f32) -> f32 {
         return sec_size + zoom_sen;
     }
     if rl.is_key_down(KEY_Q) {
-        return sec_size - zoom_sen;
+        return match sec_size > 6. {
+            true => sec_size - zoom_sen,
+            false => sec_size,
+        };
     }
     return sec_size;
 }
