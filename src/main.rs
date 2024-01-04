@@ -1,3 +1,4 @@
+use game_color::COLORS;
 use jonk_utils::Jrand;
 use model::star_system::StarSystem;
 use raylib::consts::KeyboardKey::*;
@@ -43,7 +44,7 @@ fn main() {
         handle_key_press(
             &rl,
             &mut global_pos,
-            sec_size as f32 * 8. * rl.get_frame_time(),
+            (16. * 8. * rl.get_frame_time()) / (sec_size),
         );
 
         let mouse_x = rl.get_mouse_x();
@@ -145,7 +146,7 @@ fn handle_mouse_hover(
 
 fn draw_lines(draw: &mut RaylibDrawHandle, lines: Vec<&str>, f_size: i32, s_x: i32, s_y: i32) {
     let mut start_y = s_y;
-    draw.draw_rectangle(s_x, start_y, 540, f_size * lines.len() as i32, Color::BLUE);
+    draw.draw_rectangle(s_x, start_y, 540, f_size * lines.len() as i32, COLORS.bg);
     for s in lines {
         draw.draw_text(s, s_x, start_y, f_size, Color::WHITE);
         start_y += f_size;

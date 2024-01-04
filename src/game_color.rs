@@ -3,11 +3,12 @@ use raylib::color::Color;
 
 #[derive(Debug)]
 pub struct Gamecolors {
-    blue: Color,
-    white: Color,
-    yellow: Color,
-    orange: Color,
-    red: Color,
+    pub blue: Color,
+    pub white: Color,
+    pub yellow: Color,
+    pub orange: Color,
+    pub red: Color,
+    pub bg: Color,
 }
 
 impl From<StarColor> for Color {
@@ -22,7 +23,7 @@ impl From<StarColor> for Color {
     }
 }
 
-static COLORS: Gamecolors = Gamecolors {
+pub static COLORS: Gamecolors = Gamecolors {
     blue: Color {
         r: 137,
         g: 180,
@@ -51,6 +52,12 @@ static COLORS: Gamecolors = Gamecolors {
         r: 243,
         g: 139,
         b: 168,
+        a: 255,
+    },
+    bg: Color {
+        r: 30,
+        g: 30,
+        b: 46,
         a: 255,
     },
 };
