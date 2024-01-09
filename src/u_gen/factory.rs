@@ -29,13 +29,23 @@ pub fn new_star(star_sector_x: i32, star_sector_y: i32) -> StarSystem {
             x: star_sector_x,
             y: star_sector_y,
         },
-        planets: generate_planets(star_sector_x, star_sector_y),
+        planets: generate_planets(star_sector_x, star_sector_y, &mut jonk_random),
     };
 }
 
-pub fn new_planet(star_sector_x: i32, star_sector_y: i32) -> Planet {
-    let mut jonk_random = Jrand::new();
-    jonk_random.seed = jonk_utils::cantor_hash(star_sector_x, star_sector_y);
+fn generate_planets(
+    star_sector_x: i32,
+    star_sector_y: i32,
+    jonk_random: &mut Jrand,
+) -> Vec<Planet> {
+    let mut return_data: Vec<Planet> = Vec::new();
+    for _i in 0..jonk_random.rnd_range(0, 13) {
+        return_data.push(new_planet(star_sector_x, star_sector_y, jonk_random));
+    }
+    return return_data;
+}
+
+pub fn new_planet(star_sector_x: i32, star_sector_y: i32, jonk_random: &mut Jrand) -> Planet {
     return Planet {
         location: VecI {
             x: star_sector_x,
@@ -50,14 +60,4 @@ pub fn new_planet(star_sector_x: i32, star_sector_y: i32) -> Planet {
         mass: jonk_random.rnd_range_float(1000., 2000000.),
         density: jonk_random.rnd_range_float(1000., 2000000.),
     };
-}
-
-fn generate_planets(star_sector_x: i32, star_sector_y: i32) -> Vec<Planet> {
-    let mut jonk_random = Jrand::new();
-    let mut return_data: Vec<Planet> = Vec::new();
-    jonk_random.seed = jonk_utils::cantor_hash(star_sector_x, star_sector_y);
-    for _i in 0..jonk_random.rnd_range(0, 13) {
-        return_data.push(new_planet(star_sector_x, star_sector_y));
-    }
-    return return_data;
 }

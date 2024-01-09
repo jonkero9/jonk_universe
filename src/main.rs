@@ -91,10 +91,10 @@ fn main() {
         draw_lines(
             &mut draw,
             vec![
-                &format!("nsecs: {}, {}", n_sec_x, n_sec_y),
-                &format!("run time seconds: {:.6}", elasped),
-                &format!("Zoom: {:.2} ", sec_size),
-                &format!("Sector: {}, {}", global_pos.x, global_pos.y),
+                format!("nsecs: {}, {}", n_sec_x, n_sec_y),
+                format!("run time seconds: {:.6}", elasped),
+                format!("Zoom: {:.2} ", sec_size),
+                format!("Sector: {}, {}", global_pos.x, global_pos.y),
             ],
             32,
             12,
@@ -129,29 +129,27 @@ fn handle_mouse_hover(
         global_pos.x as i32 + (mouse_x / sec_size as i32),
         global_pos.y as i32 + mouse_y / sec_size as i32,
     )) {
-        draw_lines(
-            draw,
-            vec![
-                &format!("Radius: {:.2}", star.radius),
-                &format!("Luminosity: {:.2} lums", star.luminosity),
-                &format!("Temp: {:.2}K", star.surface_temp),
-                &format!("Mass: {:.2} Solar masses", star.mass),
-                &format!("Planets: {}", star.planets.len()),
-                &format!("Color: {:?}", star.star_color),
-                &format!("location: {}, {}", star.location.x, star.location.y),
-            ],
-            32,
-            12,
-            160,
-        );
+        let mut lines = vec![
+            format!("Radius: {:.2}", star.radius),
+            format!("Luminosity: {:.2} lums", star.luminosity),
+            format!("Temp: {:.2}K", star.surface_temp),
+            format!("Mass: {:.2} Solar masses", star.mass),
+            format!("Planets: {}", star.planets.len()),
+            format!("Color: {:?}", star.star_color),
+            format!("location: {}, {}", star.location.x, star.location.y),
+        ];
+        for (i, pat) in star.planets.iter().enumerate() {
+            lines.push(format!("Planet: {} , Mass: {}", i, pat.mass));
+        }
+        draw_lines(draw, lines, 32, 12, 160);
     }
 }
 
-fn draw_lines(draw: &mut RaylibDrawHandle, lines: Vec<&str>, f_size: i32, s_x: i32, s_y: i32) {
+fn draw_lines(draw: &mut RaylibDrawHandle, lines: Vec<String>, f_size: i32, s_x: i32, s_y: i32) {
     let mut start_y = s_y;
     draw.draw_rectangle(s_x, start_y, 540, f_size * lines.len() as i32, COLORS.bg);
     for s in lines {
-        draw.draw_text(s, s_x, start_y, f_size, Color::WHITE);
+        draw.draw_text(&s, s_x, start_y, f_size, Color::WHITE);
         start_y += f_size;
     }
 }
