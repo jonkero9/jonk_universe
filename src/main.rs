@@ -1,5 +1,4 @@
 use game_color::COLORS;
-use jonk_utils::Jrand;
 use model::star_system::StarSystem;
 use raylib::consts::KeyboardKey::*;
 
@@ -20,7 +19,9 @@ pub struct VecI {
 
 fn main() {
     let mut sec_size: f32 = 16.;
-    let mut jonk_random = Jrand::new();
+    let mut global_pos = Vector2 { x: 0., y: 0. };
+
+    let star_map: HashMap<u64, StarSystem> = factory::new_universe(100);
 
     let (mut rl, thread) = raylib::init()
         .vsync()
@@ -28,17 +29,11 @@ fn main() {
         .size(960, 640)
         .title("Jspace")
         .build();
-
     rl.set_target_fps(75);
-
-    let mut global_pos = Vector2 { x: 0., y: 0. };
 
     while !rl.window_should_close() {
         let timer = Instant::now();
         sec_size = handle_zoom(&rl, sec_size);
-
-        let n_sec_x = rl.get_screen_width() / sec_size as i32;
-        let n_sec_y = rl.get_screen_height() / sec_size as i32;
 
         handle_key_press(
             &rl,
@@ -48,12 +43,12 @@ fn main() {
 
         let mouse_x = rl.get_mouse_x();
         let mouse_y = rl.get_mouse_y();
+        let n_sec_x = rl.get_screen_width() / sec_size as i32;
+        let n_sec_y = rl.get_screen_height() / sec_size as i32;
 
+        // Begin Draw
         let mut draw = rl.begin_drawing(&thread);
         draw.clear_background(Color::BLACK);
-
-        let mut star_map: HashMap<u64, StarSystem> = HashMap::new();
-
         for y in 0..n_sec_y {
             for x in 0..n_sec_x {
                 let global_sec = VecI {
@@ -61,11 +56,7 @@ fn main() {
                     y: global_pos.y as i32 + y,
                 };
                 let hash_key = jonk_utils::cantor_hash(global_sec.x, global_sec.y);
-                jonk_random.seed = hash_key;
-
-                if jonk_random.rnd_range(0, 20) == 1 {
-                    let star = factory::new_star(global_sec.x, global_sec.y);
-                    star_map.insert(hash_key, star.clone());
+                if let Some(star) = star_map.get(&hash_key) {
                     let sec_to_screen = VecI {
                         x: x * sec_size as i32,
                         y: y * sec_size as i32,
@@ -80,7 +71,7 @@ fn main() {
             }
         }
         handle_mouse_hover(
-            star_map,
+            &star_map,
             &mut global_pos,
             &mut draw,
             mouse_x,
@@ -118,7 +109,7 @@ fn handle_zoom(rl: &RaylibHandle, sec_size: f32) -> f32 {
 }
 
 fn handle_mouse_hover(
-    star_map: HashMap<u64, StarSystem>,
+    star_map: &HashMap<u64, StarSystem>,
     global_pos: &mut Vector2,
     draw: &mut RaylibDrawHandle,
     mouse_x: i32,
