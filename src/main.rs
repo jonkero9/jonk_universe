@@ -39,7 +39,7 @@ pub mod game_color;
 pub mod model;
 pub mod u_gen;
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 enum ScreenState {
     UniMap,
     StarSystemMap,
@@ -76,17 +76,7 @@ fn main() {
             &mut global_pos,
             (128. * rl.get_frame_time()) / (sec_size / 16.),
         );
-
-        if rl.is_key_pressed(KEY_BACKSPACE) {
-            match screen_state {
-                ScreenState::UniMap => {
-                    screen_state = ScreenState::StarSystemMap;
-                }
-                ScreenState::StarSystemMap => {
-                    screen_state = ScreenState::UniMap;
-                }
-            }
-        }
+        screen_state = handle_screen_state_key(&rl, &screen_state);
 
         let mouse_x = rl.get_mouse_x();
         let mouse_y = rl.get_mouse_y();
@@ -221,4 +211,13 @@ fn handle_key_press(rl: &RaylibHandle, global_pos: &mut Vector2, sensitivity: f3
     if rl.is_key_down(KEY_H) {
         global_pos.x -= sensitivity;
     }
+}
+fn handle_screen_state_key(rl: &RaylibHandle, screen_state: &ScreenState) -> ScreenState {
+    if rl.is_key_pressed(KEY_BACKSPACE) {
+        return match screen_state {
+            ScreenState::UniMap => ScreenState::StarSystemMap,
+            ScreenState::StarSystemMap => ScreenState::UniMap,
+        };
+    }
+    return screen_state.clone();
 }
