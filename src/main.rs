@@ -21,7 +21,7 @@ fn main() {
     let mut sec_size: f32 = 16.;
     let mut global_pos = Vector2 { x: 0., y: 0. };
 
-    let star_map: HashMap<u64, StarSystem> = factory::new_universe(100);
+    let star_map: HashMap<u64, StarSystem> = factory::new_universe(1000);
 
     let (mut rl, thread) = raylib::init()
         .vsync()
@@ -146,16 +146,16 @@ fn draw_lines(draw: &mut RaylibDrawHandle, lines: Vec<String>, f_size: i32, s_x:
 }
 
 fn handle_key_press(rl: &RaylibHandle, global_pos: &mut Vector2, sensitivity: f32) {
-    if rl.is_key_down(KEY_W) {
+    if rl.is_key_down(KEY_K) {
         global_pos.y -= sensitivity;
     }
-    if rl.is_key_down(KEY_D) {
+    if rl.is_key_down(KEY_L) {
         global_pos.x += sensitivity;
     }
-    if rl.is_key_down(KEY_S) {
+    if rl.is_key_down(KEY_J) {
         global_pos.y += sensitivity;
     }
-    if rl.is_key_down(KEY_A) {
+    if rl.is_key_down(KEY_H) {
         global_pos.x -= sensitivity;
     }
 }
