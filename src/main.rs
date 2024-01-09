@@ -1,7 +1,35 @@
+//  ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣤⣤⣤⣶⣤⣤⣀⣀⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+//  ⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣴⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣶⣄⠀⠀⠀⠀⠀⠀
+//  ⠀⠀⠀⠀⠀⠀⠀⢀⣾⣿⣿⣿⣿⣿⡿⠋⠉⠛⠛⠛⠿⣿⠿⠿⢿⣇⠀⠀⠀⠀⠀
+//  ⠀⠀⠀⠀⠀⠀⠀⣾⣿⣿⣿⣿⣿⠟⠀⠀⠀⠀⠀⡀⢀⣽⣷⣆⡀⠙⣧⠀⠀⠀⠀
+//  ⠀⠀⠀⠀⠀⠀⢰⣿⣿⣿⣿⣿⣷⠶⠋⠀⠀⣠⣤⣤⣉⣉⣿⠙⣿⠀⢸⡆⠀⠀⠀
+//  ⠀⠀⠀⠀⠀⠀⢸⣿⣿⣿⣿⣿⠁⠀⠀⠴⡟⣻⣿⣿⣿⣿⣿⣶⣿⣦⡀⣇⠀⠀⠀
+//  ⠀⠀⠀⠀⠀⠀⢨⠟⡿⠻⣿⠃⠀⠀⠀⠻⢿⣿⣿⣿⣿⣿⠏⢹⣿⣿⣿⢿⡇⠀⠀
+//  ⠀⠀⠀⠀⠀⠀⣿⣼⣷⡶⣿⣄⠀⠀⠀⠀⠀⢉⣿⣿⣿⡿⠀⠸⣿⣿⡿⣷⠃⠀⠀
+//  ⠀⠀⠀⠀⠀⠀⢻⡿⣦⢀⣿⣿⣄⡀⣀⣰⠾⠛⣻⣿⣿⣟⣲⡀⢸⡿⡟⠹⡆⠀⠀
+//  ⠀⠀⠀⠀⠀⠀⠀⢰⠞⣾⣿⡛⣿⣿⣿⣿⣰⣾⣿⣿⣿⣿⣿⣿⣿⣿⡇⢰⡇⠀⠀
+//  ⠀⠀⠀⠀⠀⠀⠀⠘⠀⣿⡽⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⢿⠿⣍⣿⣧⡏⠀⠀⠀
+//  ⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣷⣿⣿⣿⣿⣿⣿⣿⣿⣷⣮⣽⣿⣷⣙⣿⡟⠀⠀⠀⠀
+//  ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡟⣹⡿⠇⠀⠀⠀⠀
+//  ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠛⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡧⣦⠀⠀⠀⠀
+//  ⠀⠀⠀⠀⠀⢠⡆⠀⠀⠀⠀⠀⠀⠀⠉⠻⣿⣿⣾⣿⣿⣿⣿⣿⣿⡶⠏⠀⠀⠀⠀
+//  ⣀⣠⣤⡴⠞⠛⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠚⣿⣿⣿⠿⣿⣿⠿⠟⠁⠀⠀⠀⠀⠀
+//  ⠉⠀⢀⡴⠂⠀⠀⠀⠀⠀⠀⠀⠀⢠⠀⠀⢀⣿⣿⠁⠀⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀
+//  ⣠⣴⡿⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⣾⠀⠀⣾⣿⠋⠀⢠⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀
+//  ⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣆⣼⣿⠁⢠⠃⠈⠓⠦⣄⡀⠀⠀⠀⠀⠀⠀
+//  ⠻⠿⢷⣦⣤⣤⣤⣦⣄⣀⣀⠀⢀⣿⣿⠻⣿⣰⠻⠀⠸⣧⡀⠀⠉⠳⣄⠀⠀⠀⠀
+//  ⠀⠀⠀⠀⠀⠈⠉⠉⠙⠛⠿⣦⣼⡏⢻⣿⣿⠇⠀⠁⠀⠻⣿⠙⣶⣄⠈⠳⣄⡀⠀
+//  ⠀⠀⠀⠀⠀⠀⠀⠁⣐⠀⠀⠀⠈⠳⡘⣿⡟⣀⡠⠿⠶⠒⠟⠓⠀⠹⡄⢴⣬⣍⡁
+//  ⠀⠀⠀⠀⠀⠀⠀⠀⠙⢀⣀⠐⠲⠤⠁⢘⣠⣿⣷⣦⠀⠀⠀⠀⠀⠀⠙⢿⣿⣏⠁
+//  ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠀⠀⠀⠀⠈⣿⣿⣷⣯⠀⠀⠀⠀⠀⠀⠀⠀⠉⠻⠆
+//  ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⢦⠀⢹⣿⣏⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+//  ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠁⣸⣿⣿⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+//  ⠀⠀⠀⠐⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢻⣿⣿⣷⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+//  ⠀⡟⢬⣿⣷⣤⣀⣄⣀⡀⠀⠀⠀⠀⠀⠀⠈⣿⣿⡄⣉⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+
 use game_color::COLORS;
 use model::star_system::StarSystem;
 use raylib::consts::KeyboardKey::*;
-
 use raylib::prelude::*;
 use std::collections::HashMap;
 use std::time::Instant;
@@ -10,6 +38,12 @@ use u_gen::factory;
 pub mod game_color;
 pub mod model;
 pub mod u_gen;
+
+#[derive(Debug)]
+enum ScreenState {
+    UniMap,
+    StarSystemMap,
+}
 
 #[derive(Debug, Clone, Copy)]
 pub struct VecI {
@@ -21,7 +55,9 @@ fn main() {
     let mut sec_size: f32 = 16.;
     let mut global_pos = Vector2 { x: 0., y: 0. };
 
-    let star_map: HashMap<u64, StarSystem> = factory::new_universe(1000);
+    let star_map: HashMap<u64, StarSystem> = factory::new_universe(2000);
+    let selected_star = star_map.iter().last().expect("no stars generated").1;
+    let mut screen_state = ScreenState::UniMap;
 
     let (mut rl, thread) = raylib::init()
         .vsync()
@@ -41,6 +77,17 @@ fn main() {
             (128. * rl.get_frame_time()) / (sec_size / 16.),
         );
 
+        if rl.is_key_pressed(KEY_BACKSPACE) {
+            match screen_state {
+                ScreenState::UniMap => {
+                    screen_state = ScreenState::StarSystemMap;
+                }
+                ScreenState::StarSystemMap => {
+                    screen_state = ScreenState::UniMap;
+                }
+            }
+        }
+
         let mouse_x = rl.get_mouse_x();
         let mouse_y = rl.get_mouse_y();
         let n_sec_x = rl.get_screen_width() / sec_size as i32;
@@ -49,43 +96,52 @@ fn main() {
         // Begin Draw
         let mut draw = rl.begin_drawing(&thread);
         draw.clear_background(Color::BLACK);
-        for y in 0..n_sec_y {
-            for x in 0..n_sec_x {
-                let global_sec = VecI {
-                    x: global_pos.x as i32 + x,
-                    y: global_pos.y as i32 + y,
-                };
-                let hash_key = jonk_utils::cantor_hash(global_sec.x, global_sec.y);
-                if let Some(star) = star_map.get(&hash_key) {
-                    let sec_to_screen = VecI {
-                        x: x * sec_size as i32,
-                        y: y * sec_size as i32,
-                    };
-                    draw.draw_circle(
-                        sec_to_screen.x + (sec_size / 2.) as i32,
-                        sec_to_screen.y + (sec_size / 2.) as i32,
-                        (star.radius / 2000.) * (sec_size / 2.),
-                        Color::from(star.star_color),
-                    );
+
+        match screen_state {
+            ScreenState::UniMap => {
+                for y in 0..n_sec_y {
+                    for x in 0..n_sec_x {
+                        let global_sec = VecI {
+                            x: global_pos.x as i32 + x,
+                            y: global_pos.y as i32 + y,
+                        };
+                        let hash_key = jonk_utils::cantor_hash(global_sec.x, global_sec.y);
+                        if let Some(star) = star_map.get(&hash_key) {
+                            let sec_to_screen = VecI {
+                                x: x * sec_size as i32,
+                                y: y * sec_size as i32,
+                            };
+                            draw.draw_circle(
+                                sec_to_screen.x + (sec_size / 2.) as i32,
+                                sec_to_screen.y + (sec_size / 2.) as i32,
+                                (star.radius / 2000.) * (sec_size / 2.),
+                                Color::from(star.star_color),
+                            );
+                        }
+                    }
                 }
+                handle_mouse_hover(
+                    &star_map,
+                    &mut global_pos,
+                    &mut draw,
+                    mouse_x,
+                    mouse_y,
+                    sec_size,
+                );
+            }
+            ScreenState::StarSystemMap => {
+                draw_debug_star_menu(selected_star, &mut draw);
             }
         }
-        handle_mouse_hover(
-            &star_map,
-            &mut global_pos,
-            &mut draw,
-            mouse_x,
-            mouse_y,
-            sec_size,
-        );
+
         let elasped = timer.elapsed().as_secs_f64();
         draw_lines(
             &mut draw,
             vec![
-                format!("nsecs: {}, {}", n_sec_x, n_sec_y),
-                format!("run time seconds: {:.6}", elasped),
-                format!("Zoom: {:.2} ", sec_size),
-                format!("Sector: {}, {}", global_pos.x, global_pos.y),
+                &format!("nsecs: {}, {}", n_sec_x, n_sec_y),
+                &format!("run time seconds: {:.6}", elasped),
+                &format!("Zoom: {:.2} ", sec_size),
+                &format!("Sector: {}, {}", global_pos.x, global_pos.y),
             ],
             32,
             12,
@@ -120,23 +176,30 @@ fn handle_mouse_hover(
         global_pos.x as i32 + (mouse_x / sec_size as i32),
         global_pos.y as i32 + mouse_y / sec_size as i32,
     )) {
-        let mut lines = vec![
-            format!("Radius: {:.2}", star.radius),
-            format!("Luminosity: {:.2} lums", star.luminosity),
-            format!("Temp: {:.2}K", star.surface_temp),
-            format!("Mass: {:.2} Solar masses", star.mass),
-            format!("Planets: {}", star.planets.len()),
-            format!("Color: {:?}", star.star_color),
-            format!("location: {}, {}", star.location.x, star.location.y),
-        ];
-        for (i, pat) in star.planets.iter().enumerate() {
-            lines.push(format!("Planet: {} , Mass: {}", i, pat.mass));
-        }
-        draw_lines(draw, lines, 32, 12, 160);
+        draw_debug_star_menu(star, draw);
     }
 }
 
-fn draw_lines(draw: &mut RaylibDrawHandle, lines: Vec<String>, f_size: i32, s_x: i32, s_y: i32) {
+fn draw_debug_star_menu(star: &StarSystem, draw: &mut RaylibDrawHandle) {
+    let lines = vec![
+        format!("Radius: {:.2}", star.radius),
+        format!("Luminosity: {:.2} lums", star.luminosity),
+        format!("Temp: {:.2}K", star.surface_temp),
+        format!("Mass: {:.2} Solar masses", star.mass),
+        format!("Planets: {}", star.planets.len()),
+        format!("Color: {:?}", star.star_color),
+        format!("location: {}, {}", star.location.x, star.location.y),
+    ];
+    let planet_lines: Vec<String> = star
+        .planets
+        .iter()
+        .map(|p| format!(" planet : {}", p.mass))
+        .collect();
+    let collect: Vec<&String> = lines.iter().chain(planet_lines.iter()).collect();
+    draw_lines(draw, collect, 32, 12, 160);
+}
+
+fn draw_lines(draw: &mut RaylibDrawHandle, lines: Vec<&String>, f_size: i32, s_x: i32, s_y: i32) {
     let mut start_y = s_y;
     draw.draw_rectangle(s_x, start_y, 540, f_size * lines.len() as i32, COLORS.bg);
     for s in lines {
