@@ -88,37 +88,16 @@ fn main() {
         draw.clear_background(Color::BLACK);
 
         match screen_state {
-            ScreenState::UniMap => {
-                for y in 0..n_sec_y {
-                    for x in 0..n_sec_x {
-                        let global_sec = VecI {
-                            x: global_pos.x as i32 + x,
-                            y: global_pos.y as i32 + y,
-                        };
-                        let hash_key = jonk_utils::cantor_hash(global_sec.x, global_sec.y);
-                        if let Some(star) = star_map.get(&hash_key) {
-                            let sec_to_screen = VecI {
-                                x: x * sec_size as i32,
-                                y: y * sec_size as i32,
-                            };
-                            draw.draw_circle(
-                                sec_to_screen.x + (sec_size / 2.) as i32,
-                                sec_to_screen.y + (sec_size / 2.) as i32,
-                                (star.radius / 2000.) * (sec_size / 2.),
-                                Color::from(star.star_color),
-                            );
-                        }
-                    }
-                }
-                handle_mouse_hover(
-                    &star_map,
-                    &mut global_pos,
-                    &mut draw,
-                    mouse_x,
-                    mouse_y,
-                    sec_size,
-                );
-            }
+            ScreenState::UniMap => handle_uni_map_draw(
+                n_sec_x,
+                n_sec_y,
+                &mut global_pos,
+                &star_map,
+                sec_size,
+                &mut draw,
+                mouse_x,
+                mouse_y,
+            ),
             ScreenState::StarSystemMap => {
                 draw_debug_star_menu(selected_star, &mut draw);
             }
@@ -138,6 +117,40 @@ fn main() {
             12,
         );
     }
+}
+
+fn handle_uni_map_draw(
+    n_sec_x: i32,
+    n_sec_y: i32,
+    global_pos: &mut Vector2,
+    star_map: &HashMap<u64, StarSystem>,
+    sec_size: f32,
+    draw: &mut RaylibDrawHandle,
+    mouse_x: i32,
+    mouse_y: i32,
+) {
+    for y in 0..n_sec_y {
+        for x in 0..n_sec_x {
+            let global_sec = VecI {
+                x: global_pos.x as i32 + x,
+                y: global_pos.y as i32 + y,
+            };
+            let hash_key = jonk_utils::cantor_hash(global_sec.x, global_sec.y);
+            if let Some(star) = star_map.get(&hash_key) {
+                let sec_to_screen = VecI {
+                    x: x * sec_size as i32,
+                    y: y * sec_size as i32,
+                };
+                draw.draw_circle(
+                    sec_to_screen.x + (sec_size / 2.) as i32,
+                    sec_to_screen.y + (sec_size / 2.) as i32,
+                    (star.radius / 2000.) * (sec_size / 2.),
+                    Color::from(star.star_color),
+                );
+            }
+        }
+    }
+    handle_mouse_hover(&star_map, global_pos, draw, mouse_x, mouse_y, sec_size);
 }
 
 fn handle_zoom(rl: &RaylibHandle, sec_size: f32) -> f32 {
