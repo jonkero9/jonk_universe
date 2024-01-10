@@ -1,3 +1,28 @@
+//  ⣿⣿⣿⣿⣿⣿⣿⣿⡿⠿⠛⠛⠛⠋⠉⠈⠉⠉⠉⠉⠛⠻⢿⣿⣿⣿⣿⣿⣿⣿
+//  ⣿⣿⣿⣿⣿⡿⠋⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠛⢿⣿⣿⣿⣿
+//  ⣿⣿⣿⣿⡏⣀⠀⠀⠀⠀⠀⠀⠀⣀⣤⣤⣤⣄⡀⠀⠀⠀⠀⠀⠀⠀⠙⢿⣿⣿
+//  ⣿⣿⣿⢏⣴⣿⣷⠀⠀⠀⠀⠀⢾⣿⣿⣿⣿⣿⣿⡆⠀⠀⠀⠀⠀⠀⠀⠈⣿⣿
+//  ⣿⣿⣟⣾⣿⡟⠁⠀⠀⠀⠀⠀⢀⣾⣿⣿⣿⣿⣿⣷⢢⠀⠀⠀⠀⠀⠀⠀⢸⣿
+//  ⣿⣿⣿⣿⣟⠀⡴⠄⠀⠀⠀⠀⠀⠀⠙⠻⣿⣿⣿⣿⣷⣄⠀⠀⠀⠀⠀⠀⠀⣿
+//  ⣿⣿⣿⠟⠻⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠶⢴⣿⣿⣿⣿⣿⣧⠀⠀⠀⠀⠀⠀⣿
+//  ⣿⣁⡀⠀⠀⢰⢠⣦⠀⠀⠀⠀⠀⠀⠀⠀⢀⣼⣿⣿⣿⣿⣿⡄⠀⣴⣶⣿⡄⣿
+//  ⣿⡋⠀⠀⠀⠎⢸⣿⡆⠀⠀⠀⠀⠀⠀⣴⣿⣿⣿⣿⣿⣿⣿⠗⢘⣿⣟⠛⠿⣼
+//  ⣿⣿⠋⢀⡌⢰⣿⡿⢿⡀⠀⠀⠀⠀⠀⠙⠿⣿⣿⣿⣿⣿⡇⠀⢸⣿⣿⣧⢀⣼
+//  ⣿⣿⣷⢻⠄⠘⠛⠋⠛⠃⠀⠀⠀⠀⠀⢿⣧⠈⠉⠙⠛⠋⠀⠀⠀⣿⣿⣿⣿⣿
+//  ⣿⣿⣧⠀⠈⢸⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠟⠀⠀⠀⠀⢀⢃⠀⠀⢸⣿⣿⣿⣿
+//  ⣿⣿⡿⠀⠴⢗⣠⣤⣴⡶⠶⠖⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⡸⠀⣿⣿⣿⣿
+//  ⣿⣿⣿⡀⢠⣾⣿⠏⠀⠠⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠛⠉⠀⣿⣿⣿⣿
+//  ⣿⣿⣿⣧⠈⢹⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣰⣿⣿⣿⣿
+//  ⣿⣿⣿⣿⡄⠈⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⣴⣾⣿⣿⣿⣿⣿
+//  ⣿⣿⣿⣿⣧⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿
+//  ⣿⣿⣿⣿⣷⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣴⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
+//  ⣿⣿⣿⣿⣿⣦⣄⣀⣀⣀⣀⠀⠀⠀⠀⠘⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
+//  ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⡄⠀⠀⠀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
+//  ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣧⠀⠀⠀⠙⣿⣿⡟⢻⣿⣿⣿⣿⣿⣿⣿⣿⣿
+//  ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠇⠀⠁⠀⠀⠹⣿⠃⠀⣿⣿⣿⣿⣿⣿⣿⣿⣿
+//  ⣿⣿⣿⣿⣿⣿⣿⣿⡿⠛⣿⣿⠀⠀⠀⠀⠀⠀⠀⠀⢐⣿⣿⣿⣿⣿⣿⣿⣿⣿
+//  ⣿⣿⣿⣿⠿⠛⠉⠉⠁⠀⢻⣿⡇⠀⠀⠀⠀⠀⠀⢀⠈⣿⣿⡿⠉⠛⠛⠛⠉⠉
+//  ⣿⡿⠋⠁⠀⠀⢀⣀⣠⡴⣸⣿⣇⡄⠀⠀⠀⠀⢀⡿⠄⠙⠛⠀⣀⣠⣤⣤⠄⠀
 //  ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣤⣤⣤⣶⣤⣤⣀⣀⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 //  ⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣴⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣶⣄⠀⠀⠀⠀⠀⠀
 //  ⠀⠀⠀⠀⠀⠀⠀⢀⣾⣿⣿⣿⣿⣿⡿⠋⠉⠛⠛⠛⠿⣿⠿⠿⢿⣇⠀⠀⠀⠀⠀
@@ -30,6 +55,7 @@
 use game_color::COLORS;
 use model::star_system::StarSystem;
 use raylib::consts::KeyboardKey::*;
+use raylib::consts::MouseButton::*;
 use raylib::prelude::*;
 use std::collections::HashMap;
 use std::time::Instant;
@@ -56,7 +82,12 @@ fn main() {
     let mut global_pos = Vector2 { x: 0., y: 0. };
 
     let star_map: HashMap<u64, StarSystem> = factory::new_universe(2000);
-    let selected_star = star_map.iter().last().expect("no stars generated").1;
+    let mut selected_star = star_map
+        .iter()
+        .last()
+        .expect("no stars generated")
+        .1
+        .clone();
     let mut screen_state = ScreenState::UniMap;
 
     let (mut rl, thread) = raylib::init()
@@ -76,7 +107,11 @@ fn main() {
             &mut global_pos,
             (128. * rl.get_frame_time()) / (sec_size / 16.),
         );
-        screen_state = handle_screen_state_key(&rl, &screen_state);
+        if let Some(star) = handle_select_star(&rl, &star_map, &global_pos, sec_size as i32) {
+            println!("hi");
+            selected_star = star;
+        }
+        screen_state = handle_mouse_click(&rl, &screen_state);
 
         let mouse_x = rl.get_mouse_x();
         let mouse_y = rl.get_mouse_y();
@@ -99,7 +134,7 @@ fn main() {
                 mouse_y,
             ),
             ScreenState::StarSystemMap => {
-                draw_debug_star_menu(selected_star, &mut draw);
+                draw_debug_star_menu(&selected_star, &mut draw);
             }
         }
 
@@ -117,6 +152,22 @@ fn main() {
             12,
         );
     }
+}
+
+fn handle_select_star(
+    rl: &RaylibHandle,
+    star_map: &HashMap<u64, StarSystem>,
+    global_pos: &Vector2,
+    sec_size: i32,
+) -> Option<StarSystem> {
+    if rl.is_mouse_button_pressed(MOUSE_LEFT_BUTTON) {
+        let mouse_x = rl.get_mouse_x() / sec_size;
+        let mouse_y = rl.get_mouse_y() / sec_size;
+        let hash =
+            jonk_utils::cantor_hash(global_pos.x as i32 + mouse_x, global_pos.y as i32 + mouse_y);
+        return star_map.get(&hash).cloned();
+    }
+    None
 }
 
 fn handle_uni_map_draw(
@@ -225,8 +276,8 @@ fn handle_key_press(rl: &RaylibHandle, global_pos: &mut Vector2, sensitivity: f3
         global_pos.x -= sensitivity;
     }
 }
-fn handle_screen_state_key(rl: &RaylibHandle, screen_state: &ScreenState) -> ScreenState {
-    if rl.is_key_pressed(KEY_BACKSPACE) {
+fn handle_mouse_click(rl: &RaylibHandle, screen_state: &ScreenState) -> ScreenState {
+    if rl.is_mouse_button_pressed(MOUSE_LEFT_BUTTON) {
         return match screen_state {
             ScreenState::UniMap => ScreenState::StarSystemMap,
             ScreenState::StarSystemMap => ScreenState::UniMap,
