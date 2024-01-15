@@ -82,12 +82,8 @@ fn main() {
     let mut global_pos = Vector2 { x: 0., y: 0. };
 
     let star_map: HashMap<u64, StarSystem> = factory::new_universe(2000);
-    let mut selected_star = star_map
-        .iter()
-        .last()
-        .expect("no stars generated")
-        .1
-        .clone();
+    let mut selected_star: Option<&StarSystem> = None;
+
     let mut screen_state = ScreenState::UniMap;
 
     let (mut rl, thread) = raylib::init()
@@ -108,9 +104,8 @@ fn main() {
             (128. * rl.get_frame_time()) / (sec_size / 16.),
         );
         if let Some(star) = handle_select_star(&rl, &star_map, &global_pos, sec_size as i32) {
-            println!("hi");
-            selected_star = star;
-        }
+            selected_star = Some(star);
+        };
         screen_state = handle_mouse_click(&rl, &screen_state);
 
         let mouse_x = rl.get_mouse_x();
@@ -134,7 +129,9 @@ fn main() {
                 mouse_y,
             ),
             ScreenState::StarSystemMap => {
-                draw_debug_star_menu(&selected_star, &mut draw);
+                if let Some(pat) = selected_star {
+                    draw_debug_star_menu(pat, &mut draw);
+                }
             }
         }
 
@@ -154,18 +151,18 @@ fn main() {
     }
 }
 
-fn handle_select_star(
+fn handle_select_star<'a>(
     rl: &RaylibHandle,
-    star_map: &HashMap<u64, StarSystem>,
+    star_map: &'a HashMap<u64, StarSystem>,
     global_pos: &Vector2,
     sec_size: i32,
-) -> Option<StarSystem> {
+) -> Option<&'a StarSystem> {
     if rl.is_mouse_button_pressed(MOUSE_LEFT_BUTTON) {
         let mouse_x = rl.get_mouse_x() / sec_size;
         let mouse_y = rl.get_mouse_y() / sec_size;
         let hash =
             jonk_utils::cantor_hash(global_pos.x as i32 + mouse_x, global_pos.y as i32 + mouse_y);
-        return star_map.get(&hash).cloned();
+        return star_map.get(&hash);
     }
     None
 }
