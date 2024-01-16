@@ -80,9 +80,7 @@ pub struct VecI {
 fn main() {
     let mut sec_size: f32 = 16.;
     let mut global_pos = Vector2 { x: 0., y: 0. };
-
     let mut selected_star: Option<StarSystem> = None;
-
     let mut screen_state = ScreenState::UniMap;
 
     let (mut rl, thread) = raylib::init()
@@ -95,13 +93,6 @@ fn main() {
 
     while !rl.window_should_close() {
         let timer = Instant::now();
-        sec_size = handle_zoom(&rl, sec_size);
-
-        handle_key_press(
-            &rl,
-            &mut global_pos,
-            (128. * rl.get_frame_time()) / (sec_size / 16.),
-        );
 
         let n_sectors = VecI {
             x: rl.get_screen_width() / sec_size as i32,
@@ -115,10 +106,27 @@ fn main() {
             },
             n_sectors,
         );
-        if let Some(star) = handle_select_star(&rl, &star_map, &global_pos, sec_size as i32) {
-            selected_star = Some(star.clone());
-        };
-        screen_state = handle_mouse_click(&rl, &screen_state);
+
+        // Handle User Input
+        match screen_state {
+            ScreenState::UniMap => {
+                sec_size = handle_zoom_unimap(&rl, sec_size);
+                handle_key_press_unimap(
+                    &rl,
+                    &mut global_pos,
+                    (128. * rl.get_frame_time()) / (sec_size / 16.),
+                );
+                if let Some(star) =
+                    handle_select_star_unimap(&rl, &star_map, &global_pos, sec_size as i32)
+                {
+                    selected_star = Some(star.clone());
+                };
+                screen_state = handle_mouse_click_unimap(&rl, &screen_state);
+            }
+            ScreenState::StarSystemMap => {
+                //todo
+            }
+        }
 
         // Begin Draw
         let mut draw = rl.begin_drawing(&thread);
@@ -151,7 +159,7 @@ fn main() {
     }
 }
 
-fn handle_select_star<'a>(
+fn handle_select_star_unimap<'a>(
     rl: &RaylibHandle,
     star_map: &'a HashMap<u64, StarSystem>,
     global_pos: &Vector2,
@@ -198,7 +206,7 @@ fn handle_uni_map_draw(
     handle_mouse_hover(&star_map, global_pos, draw, sec_size);
 }
 
-fn handle_zoom(rl: &RaylibHandle, sec_size: f32) -> f32 {
+fn handle_zoom_unimap(rl: &RaylibHandle, sec_size: f32) -> f32 {
     let zoom_sen = sec_size * rl.get_frame_time();
     if rl.is_key_down(KEY_E) {
         return sec_size + zoom_sen;
@@ -254,7 +262,7 @@ fn draw_lines(draw: &mut RaylibDrawHandle, lines: Vec<&String>, f_size: i32, s_x
     }
 }
 
-fn handle_key_press(rl: &RaylibHandle, global_pos: &mut Vector2, sensitivity: f32) {
+fn handle_key_press_unimap(rl: &RaylibHandle, global_pos: &mut Vector2, sensitivity: f32) {
     if rl.is_key_down(KEY_K) {
         global_pos.y -= sensitivity;
     }
@@ -268,7 +276,7 @@ fn handle_key_press(rl: &RaylibHandle, global_pos: &mut Vector2, sensitivity: f3
         global_pos.x -= sensitivity;
     }
 }
-fn handle_mouse_click(rl: &RaylibHandle, screen_state: &ScreenState) -> ScreenState {
+fn handle_mouse_click_unimap(rl: &RaylibHandle, screen_state: &ScreenState) -> ScreenState {
     if rl.is_mouse_button_pressed(MOUSE_LEFT_BUTTON) {
         return match screen_state {
             ScreenState::UniMap => ScreenState::StarSystemMap,
