@@ -81,8 +81,7 @@ fn main() {
     let mut sec_size: f32 = 16.;
     let mut global_pos = Vector2 { x: 0., y: 0. };
 
-    let star_map: HashMap<u64, StarSystem> = factory::new_universe(2000);
-    let mut selected_star: Option<&StarSystem> = None;
+    let mut selected_star: Option<StarSystem> = None;
 
     let mut screen_state = ScreenState::UniMap;
 
@@ -103,34 +102,35 @@ fn main() {
             &mut global_pos,
             (128. * rl.get_frame_time()) / (sec_size / 16.),
         );
+
+        let n_sectors = VecI {
+            x: rl.get_screen_width() / sec_size as i32,
+            y: rl.get_screen_height() / sec_size as i32,
+        };
+
+        let star_map: HashMap<u64, StarSystem> = factory::new_universe(
+            VecI {
+                x: global_pos.x as i32,
+                y: global_pos.y as i32,
+            },
+            n_sectors,
+        );
         if let Some(star) = handle_select_star(&rl, &star_map, &global_pos, sec_size as i32) {
-            selected_star = Some(star);
+            selected_star = Some(star.clone());
         };
         screen_state = handle_mouse_click(&rl, &screen_state);
-
-        let mouse_x = rl.get_mouse_x();
-        let mouse_y = rl.get_mouse_y();
-        let n_sec_x = rl.get_screen_width() / sec_size as i32;
-        let n_sec_y = rl.get_screen_height() / sec_size as i32;
 
         // Begin Draw
         let mut draw = rl.begin_drawing(&thread);
         draw.clear_background(Color::BLACK);
 
         match screen_state {
-            ScreenState::UniMap => handle_uni_map_draw(
-                n_sec_x,
-                n_sec_y,
-                &mut global_pos,
-                &star_map,
-                sec_size,
-                &mut draw,
-                mouse_x,
-                mouse_y,
-            ),
+            ScreenState::UniMap => {
+                handle_uni_map_draw(n_sectors, &mut global_pos, &star_map, sec_size, &mut draw)
+            }
             ScreenState::StarSystemMap => {
-                if let Some(pat) = selected_star {
-                    draw_debug_star_menu(pat, &mut draw);
+                if let Some(pat) = &selected_star {
+                    draw_debug_star_menu(&pat, &mut draw);
                 }
             }
         }
@@ -139,7 +139,7 @@ fn main() {
         draw_lines(
             &mut draw,
             vec![
-                &format!("nsecs: {}, {}", n_sec_x, n_sec_y),
+                &format!("nsecs: {}, {}", n_sectors.x, n_sectors.y),
                 &format!("run time seconds: {:.6}", elasped),
                 &format!("Zoom: {:.2} ", sec_size),
                 &format!("Sector: {}, {}", global_pos.x, global_pos.y),
@@ -168,17 +168,14 @@ fn handle_select_star<'a>(
 }
 
 fn handle_uni_map_draw(
-    n_sec_x: i32,
-    n_sec_y: i32,
+    n_sectors: VecI,
     global_pos: &mut Vector2,
     star_map: &HashMap<u64, StarSystem>,
     sec_size: f32,
     draw: &mut RaylibDrawHandle,
-    mouse_x: i32,
-    mouse_y: i32,
 ) {
-    for y in 0..n_sec_y {
-        for x in 0..n_sec_x {
+    for y in 0..n_sectors.y {
+        for x in 0..n_sectors.x {
             let global_sec = VecI {
                 x: global_pos.x as i32 + x,
                 y: global_pos.y as i32 + y,
@@ -198,7 +195,7 @@ fn handle_uni_map_draw(
             }
         }
     }
-    handle_mouse_hover(&star_map, global_pos, draw, mouse_x, mouse_y, sec_size);
+    handle_mouse_hover(&star_map, global_pos, draw, sec_size);
 }
 
 fn handle_zoom(rl: &RaylibHandle, sec_size: f32) -> f32 {
@@ -219,13 +216,11 @@ fn handle_mouse_hover(
     star_map: &HashMap<u64, StarSystem>,
     global_pos: &mut Vector2,
     draw: &mut RaylibDrawHandle,
-    mouse_x: i32,
-    mouse_y: i32,
     sec_size: f32,
 ) {
     if let Some(star) = star_map.get(&jonk_utils::cantor_hash(
-        global_pos.x as i32 + (mouse_x / sec_size as i32),
-        global_pos.y as i32 + mouse_y / sec_size as i32,
+        global_pos.x as i32 + (draw.get_mouse_x() / sec_size as i32),
+        global_pos.y as i32 + (draw.get_mouse_y() / sec_size as i32),
     )) {
         draw_debug_star_menu(star, draw);
     }

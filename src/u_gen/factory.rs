@@ -8,16 +8,16 @@ use crate::{
 use jonk_utils::Jrand;
 use std::collections::HashMap;
 
-pub fn new_universe(size: i32) -> HashMap<u64, StarSystem> {
+pub fn new_universe(location: VecI, size: VecI) -> HashMap<u64, StarSystem> {
     let mut jonk_random = Jrand::new();
     let mut star_map: HashMap<u64, StarSystem> = HashMap::new();
-    for x in -size..size {
-        for y in -size..size {
+    for x in location.x..(location.x + size.x) {
+        for y in location.y..(location.y + size.y) {
             let hash_key = jonk_utils::cantor_hash(x, y);
             jonk_random.seed = hash_key;
             if jonk_random.rnd_range(0, 20) == 1 {
                 let star = new_star(VecI { x, y }, &mut jonk_random);
-                star_map.insert(hash_key, star.clone());
+                star_map.insert(hash_key, star);
             }
         }
     }
