@@ -54,6 +54,7 @@
 
 use game_color::COLORS;
 use model::star_system::StarSystem;
+use model::vectors::Vector2DI;
 use raylib::consts::KeyboardKey::*;
 use raylib::consts::MouseButton::*;
 use raylib::prelude::*;
@@ -70,12 +71,6 @@ pub mod u_gen;
 enum ScreenState {
     UniMap,
     StarSystemMap,
-}
-
-#[derive(Debug, Clone, Copy)]
-pub struct Vector2DI {
-    pub x: i32,
-    pub y: i32,
 }
 
 fn main() {
