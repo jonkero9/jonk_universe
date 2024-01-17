@@ -126,16 +126,11 @@ fn main() {
                 {
                     selected_star = Some(star.clone());
                 };
-                screen_state = handle_screen_state_click(&rl, &screen_state);
-
-                if rl.is_key_pressed(KEY_TAB) {
-                    uni_map_debug_info = uni_map_debug_info.not();
-                }
+                uni_map_debug_info = handle_debug_info_window_key(uni_map_debug_info, &rl);
             }
-            ScreenState::StarSystemMap => {
-                screen_state = handle_screen_state_click(&rl, &screen_state);
-            }
+            ScreenState::StarSystemMap => {}
         }
+        screen_state = handle_screen_state_click(&rl, &screen_state);
 
         // Begin Draw
         let mut draw = rl.begin_drawing(&thread);
@@ -143,29 +138,28 @@ fn main() {
 
         match screen_state {
             ScreenState::UniMap => {
-                handle_uni_map_draw(n_sectors, &mut global_pos, &star_map, sec_size, &mut draw)
+                handle_uni_map_draw(n_sectors, &mut global_pos, &star_map, sec_size, &mut draw);
+                let elasped = timer.elapsed().as_secs_f64();
+                if uni_map_debug_info {
+                    draw_lines(
+                        &mut draw,
+                        vec![
+                            &format!("nsecs: {}, {}", n_sectors.x, n_sectors.y),
+                            &format!("run time seconds: {:.6}", elasped),
+                            &format!("Zoom: {:.2} ", sec_size),
+                            &format!("Sector: {}, {}", global_pos.x, global_pos.y),
+                        ],
+                        32,
+                        12,
+                        12,
+                    );
+                }
             }
             ScreenState::StarSystemMap => {
                 if let Some(pat) = &selected_star {
                     draw_debug_star_menu(&pat, &mut draw);
                 }
             }
-        }
-
-        let elasped = timer.elapsed().as_secs_f64();
-        if uni_map_debug_info {
-            draw_lines(
-                &mut draw,
-                vec![
-                    &format!("nsecs: {}, {}", n_sectors.x, n_sectors.y),
-                    &format!("run time seconds: {:.6}", elasped),
-                    &format!("Zoom: {:.2} ", sec_size),
-                    &format!("Sector: {}, {}", global_pos.x, global_pos.y),
-                ],
-                32,
-                12,
-                12,
-            );
         }
     }
 }
@@ -310,4 +304,11 @@ fn swap_screen_state(screen_state: &ScreenState) -> ScreenState {
         ScreenState::UniMap => ScreenState::StarSystemMap,
         ScreenState::StarSystemMap => ScreenState::UniMap,
     };
+}
+
+fn handle_debug_info_window_key(debug_show_flag: bool, rl: &RaylibHandle) -> bool {
+    if rl.is_key_pressed(KEY_TAB) {
+        return debug_show_flag.not();
+    }
+    return debug_show_flag;
 }
