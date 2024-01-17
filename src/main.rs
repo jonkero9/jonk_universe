@@ -126,14 +126,14 @@ fn main() {
                 {
                     selected_star = Some(star.clone());
                 };
-                screen_state = handle_mouse_click_unimap(&rl, &screen_state);
+                screen_state = handle_screen_state_click(&rl, &screen_state);
 
                 if rl.is_key_pressed(KEY_TAB) {
                     uni_map_debug_info = uni_map_debug_info.not();
                 }
             }
             ScreenState::StarSystemMap => {
-                //todo
+                screen_state = handle_screen_state_click(&rl, &screen_state);
             }
         }
 
@@ -288,12 +288,26 @@ fn handle_key_press_unimap(rl: &RaylibHandle, global_pos: &mut Vector2, sensitiv
     }
 }
 
-fn handle_mouse_click_unimap(rl: &RaylibHandle, screen_state: &ScreenState) -> ScreenState {
-    if rl.is_mouse_button_pressed(MOUSE_LEFT_BUTTON) {
-        return match screen_state {
-            ScreenState::UniMap => ScreenState::StarSystemMap,
-            ScreenState::StarSystemMap => ScreenState::UniMap,
-        };
-    }
-    return screen_state.clone();
+fn handle_screen_state_click(rl: &RaylibHandle, screen_state: &ScreenState) -> ScreenState {
+    return match screen_state {
+        ScreenState::UniMap => {
+            if rl.is_mouse_button_pressed(MOUSE_LEFT_BUTTON) {
+                return swap_screen_state(screen_state);
+            }
+            screen_state.clone()
+        }
+        ScreenState::StarSystemMap => {
+            if rl.is_mouse_button_pressed(MOUSE_RIGHT_BUTTON) {
+                return swap_screen_state(screen_state);
+            }
+            screen_state.clone()
+        }
+    };
+}
+
+fn swap_screen_state(screen_state: &ScreenState) -> ScreenState {
+    return match screen_state {
+        ScreenState::UniMap => ScreenState::StarSystemMap,
+        ScreenState::StarSystemMap => ScreenState::UniMap,
+    };
 }
