@@ -63,6 +63,7 @@ use std::collections::HashMap;
 use std::ops::Not;
 use std::time::Instant;
 use u_gen::factory;
+use ui::uni_map_window;
 use ui::uni_map_window::UniMapWindow;
 
 pub mod game_color;
@@ -78,7 +79,7 @@ enum ScreenState {
 
 fn main() {
     // Set up initial Objects
-    let mut uni_map: UniMapWindow = UniMapWindow::new(16.);
+    let mut uni_map_window: UniMapWindow = UniMapWindow::new(16.);
     let mut selected_star: Option<StarSystem> = None;
     let mut screen_state = ScreenState::UniMap;
 
@@ -96,14 +97,14 @@ fn main() {
         let timer = Instant::now();
 
         let n_sectors = Vector2DI {
-            x: rl.get_screen_width() / uni_map.sec_size as i32,
-            y: rl.get_screen_height() / uni_map.sec_size as i32,
+            x: rl.get_screen_width() / uni_map_window.sec_size as i32,
+            y: rl.get_screen_height() / uni_map_window.sec_size as i32,
         };
 
         let star_map: HashMap<u64, StarSystem> = factory::new_universe(
             Vector2DI {
-                x: uni_map.global_pos.x as i32,
-                y: uni_map.global_pos.y as i32,
+                x: uni_map_window.global_pos.x as i32,
+                y: uni_map_window.global_pos.y as i32,
             },
             n_sectors,
         );
@@ -111,22 +112,22 @@ fn main() {
         // Handle User Input
         match screen_state {
             ScreenState::UniMap => {
-                uni_map.sec_size = handle_zoom_unimap(&rl, uni_map.sec_size);
+                uni_map_window.sec_size = handle_zoom_unimap(&rl, uni_map_window.sec_size);
                 handle_key_press_unimap(
                     &rl,
-                    &mut uni_map.global_pos,
-                    (128. * rl.get_frame_time()) / (uni_map.sec_size / 16.),
+                    &mut uni_map_window.global_pos,
+                    (128. * rl.get_frame_time()) / (uni_map_window.sec_size / 16.),
                 );
                 if let Some(star) = handle_select_star_unimap(
                     &rl,
                     &star_map,
-                    &uni_map.global_pos,
-                    uni_map.sec_size as i32,
+                    &uni_map_window.global_pos,
+                    uni_map_window.sec_size as i32,
                 ) {
                     selected_star = Some(star.clone());
                 };
-                uni_map.uni_map_debug_info =
-                    handle_debug_info_window_key(uni_map.uni_map_debug_info, &rl);
+                uni_map_window.uni_map_debug_info =
+                    handle_debug_info_window_key(uni_map_window.uni_map_debug_info, &rl);
             }
             ScreenState::StarSystemMap => {}
         }
@@ -140,19 +141,12 @@ fn main() {
             ScreenState::UniMap => {
                 handle_uni_map_draw(
                     n_sectors,
-                    &mut uni_map.global_pos,
+                    &mut uni_map_window.global_pos,
                     &star_map,
-                    uni_map.sec_size,
+                    uni_map_window.sec_size,
                     &mut draw,
                 );
-                draw_uni_debug_widget(
-                    n_sectors,
-                    timer,
-                    uni_map.uni_map_debug_info,
-                    &mut draw,
-                    uni_map.sec_size,
-                    &uni_map.global_pos,
-                )
+                draw_uni_debug_widget(n_sectors, timer, &uni_map_window, &mut draw)
             }
             ScreenState::StarSystemMap => {
                 if let Some(pat) = &selected_star {
@@ -315,20 +309,21 @@ fn handle_debug_info_window_key(debug_show_flag: bool, rl: &RaylibHandle) -> boo
 fn draw_uni_debug_widget(
     n_sectors: Vector2DI,
     timer: Instant,
-    uni_map_debug_info: bool,
+    uni_map_window: &UniMapWindow,
     draw: &mut RaylibDrawHandle,
-    sec_size: f32,
-    global_pos: &Vector2DF,
 ) {
     let elasped = timer.elapsed().as_secs_f64();
-    if uni_map_debug_info {
+    if uni_map_window.uni_map_debug_info {
         draw_lines(
             draw,
             vec![
                 &format!("nsecs: {}, {}", n_sectors.x, n_sectors.y),
                 &format!("run time seconds: {:.6}", elasped),
-                &format!("Zoom: {:.2} ", sec_size),
-                &format!("Sector: {}, {}", global_pos.x, global_pos.y),
+                &format!("Zoom: {:.2} ", uni_map_window.sec_size),
+                &format!(
+                    "Sector: {}, {}",
+                    uni_map_window.global_pos.x, uni_map_window.global_pos.y
+                ),
             ],
             32,
             12,
