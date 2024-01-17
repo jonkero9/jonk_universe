@@ -266,16 +266,16 @@ fn draw_lines(draw: &mut RaylibDrawHandle, lines: Vec<&String>, f_size: i32, s_x
 }
 
 fn handle_key_press_unimap(rl: &RaylibHandle, global_pos: &mut Vector2, sensitivity: f32) {
-    if rl.is_key_down(KEY_K) {
+    if rl.is_key_down(KEY_W) {
         global_pos.y -= sensitivity;
     }
-    if rl.is_key_down(KEY_L) {
+    if rl.is_key_down(KEY_D) {
         global_pos.x += sensitivity;
     }
-    if rl.is_key_down(KEY_J) {
+    if rl.is_key_down(KEY_S) {
         global_pos.y += sensitivity;
     }
-    if rl.is_key_down(KEY_H) {
+    if rl.is_key_down(KEY_A) {
         global_pos.x -= sensitivity;
     }
 }
