@@ -54,6 +54,7 @@
 
 use game_color::COLORS;
 use model::star_system::StarSystem;
+use model::vectors::Vector2DF;
 use model::vectors::Vector2DI;
 use raylib::consts::KeyboardKey::*;
 use raylib::consts::MouseButton::*;
@@ -62,10 +63,12 @@ use std::collections::HashMap;
 use std::ops::Not;
 use std::time::Instant;
 use u_gen::factory;
+use ui::uni_map_window::UniMapWindow;
 
 pub mod game_color;
 pub mod model;
 pub mod u_gen;
+pub mod ui;
 
 #[derive(Debug, Clone)]
 enum ScreenState {
@@ -75,8 +78,7 @@ enum ScreenState {
 
 fn main() {
     // Set up initial Objects
-    let mut sec_size: f32 = 16.;
-    let mut global_pos = Vector2 { x: 0., y: 0. };
+    let mut uni_map: UniMapWindow = UniMapWindow::new(16.);
     let mut selected_star: Option<StarSystem> = None;
     let mut screen_state = ScreenState::UniMap;
     let mut uni_map_debug_info = false;
@@ -95,14 +97,14 @@ fn main() {
         let timer = Instant::now();
 
         let n_sectors = Vector2DI {
-            x: rl.get_screen_width() / sec_size as i32,
-            y: rl.get_screen_height() / sec_size as i32,
+            x: rl.get_screen_width() / uni_map.sec_size as i32,
+            y: rl.get_screen_height() / uni_map.sec_size as i32,
         };
 
         let star_map: HashMap<u64, StarSystem> = factory::new_universe(
             Vector2DI {
-                x: global_pos.x as i32,
-                y: global_pos.y as i32,
+                x: uni_map.global_pos.x as i32,
+                y: uni_map.global_pos.y as i32,
             },
             n_sectors,
         );
@@ -110,15 +112,18 @@ fn main() {
         // Handle User Input
         match screen_state {
             ScreenState::UniMap => {
-                sec_size = handle_zoom_unimap(&rl, sec_size);
+                uni_map.sec_size = handle_zoom_unimap(&rl, uni_map.sec_size);
                 handle_key_press_unimap(
                     &rl,
-                    &mut global_pos,
-                    (128. * rl.get_frame_time()) / (sec_size / 16.),
+                    &mut uni_map.global_pos,
+                    (128. * rl.get_frame_time()) / (uni_map.sec_size / 16.),
                 );
-                if let Some(star) =
-                    handle_select_star_unimap(&rl, &star_map, &global_pos, sec_size as i32)
-                {
+                if let Some(star) = handle_select_star_unimap(
+                    &rl,
+                    &star_map,
+                    &uni_map.global_pos,
+                    uni_map.sec_size as i32,
+                ) {
                     selected_star = Some(star.clone());
                 };
                 uni_map_debug_info = handle_debug_info_window_key(uni_map_debug_info, &rl);
@@ -133,14 +138,20 @@ fn main() {
 
         match screen_state {
             ScreenState::UniMap => {
-                handle_uni_map_draw(n_sectors, &mut global_pos, &star_map, sec_size, &mut draw);
+                handle_uni_map_draw(
+                    n_sectors,
+                    &mut uni_map.global_pos,
+                    &star_map,
+                    uni_map.sec_size,
+                    &mut draw,
+                );
                 draw_uni_debug_widget(
                     n_sectors,
                     timer,
                     uni_map_debug_info,
                     &mut draw,
-                    sec_size,
-                    &global_pos,
+                    uni_map.sec_size,
+                    &uni_map.global_pos,
                 )
             }
             ScreenState::StarSystemMap => {
@@ -155,7 +166,7 @@ fn main() {
 fn handle_select_star_unimap<'a>(
     rl: &RaylibHandle,
     star_map: &'a HashMap<u64, StarSystem>,
-    global_pos: &Vector2,
+    global_pos: &Vector2DF,
     sec_size: i32,
 ) -> Option<&'a StarSystem> {
     if rl.is_mouse_button_pressed(MOUSE_LEFT_BUTTON) {
@@ -170,7 +181,7 @@ fn handle_select_star_unimap<'a>(
 
 fn handle_uni_map_draw(
     n_sectors: Vector2DI,
-    global_pos: &mut Vector2,
+    global_pos: &mut Vector2DF,
     star_map: &HashMap<u64, StarSystem>,
     sec_size: f32,
     draw: &mut RaylibDrawHandle,
@@ -215,7 +226,7 @@ fn handle_zoom_unimap(rl: &RaylibHandle, sec_size: f32) -> f32 {
 
 fn handle_mouse_hover(
     star_map: &HashMap<u64, StarSystem>,
-    global_pos: &mut Vector2,
+    global_pos: &mut Vector2DF,
     draw: &mut RaylibDrawHandle,
     sec_size: f32,
 ) {
@@ -255,7 +266,7 @@ fn draw_lines(draw: &mut RaylibDrawHandle, lines: Vec<&String>, f_size: i32, s_x
     }
 }
 
-fn handle_key_press_unimap(rl: &RaylibHandle, global_pos: &mut Vector2, sensitivity: f32) {
+fn handle_key_press_unimap(rl: &RaylibHandle, global_pos: &mut Vector2DF, sensitivity: f32) {
     if rl.is_key_down(KEY_W) {
         global_pos.y -= sensitivity;
     }
@@ -307,7 +318,7 @@ fn draw_uni_debug_widget(
     uni_map_debug_info: bool,
     draw: &mut RaylibDrawHandle,
     sec_size: f32,
-    global_pos: &Vector2,
+    global_pos: &Vector2DF,
 ) {
     let elasped = timer.elapsed().as_secs_f64();
     if uni_map_debug_info {
