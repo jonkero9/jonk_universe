@@ -58,6 +58,7 @@ use raylib::consts::KeyboardKey::*;
 use raylib::consts::MouseButton::*;
 use raylib::prelude::*;
 use std::collections::HashMap;
+use std::ops::Not;
 use std::time::Instant;
 use u_gen::factory;
 
@@ -83,6 +84,7 @@ fn main() {
     let mut global_pos = Vector2 { x: 0., y: 0. };
     let mut selected_star: Option<StarSystem> = None;
     let mut screen_state = ScreenState::UniMap;
+    let mut uni_map_debug_info = false;
 
     // initialize raylib object
     let (mut rl, thread) = raylib::init()
@@ -125,6 +127,10 @@ fn main() {
                     selected_star = Some(star.clone());
                 };
                 screen_state = handle_mouse_click_unimap(&rl, &screen_state);
+
+                if rl.is_key_pressed(KEY_TAB) {
+                    uni_map_debug_info = uni_map_debug_info.not();
+                }
             }
             ScreenState::StarSystemMap => {
                 //todo
@@ -147,18 +153,20 @@ fn main() {
         }
 
         let elasped = timer.elapsed().as_secs_f64();
-        draw_lines(
-            &mut draw,
-            vec![
-                &format!("nsecs: {}, {}", n_sectors.x, n_sectors.y),
-                &format!("run time seconds: {:.6}", elasped),
-                &format!("Zoom: {:.2} ", sec_size),
-                &format!("Sector: {}, {}", global_pos.x, global_pos.y),
-            ],
-            32,
-            12,
-            12,
-        );
+        if uni_map_debug_info {
+            draw_lines(
+                &mut draw,
+                vec![
+                    &format!("nsecs: {}, {}", n_sectors.x, n_sectors.y),
+                    &format!("run time seconds: {:.6}", elasped),
+                    &format!("Zoom: {:.2} ", sec_size),
+                    &format!("Sector: {}, {}", global_pos.x, global_pos.y),
+                ],
+                32,
+                12,
+                12,
+            );
+        }
     }
 }
 
@@ -279,6 +287,7 @@ fn handle_key_press_unimap(rl: &RaylibHandle, global_pos: &mut Vector2, sensitiv
         global_pos.x -= sensitivity;
     }
 }
+
 fn handle_mouse_click_unimap(rl: &RaylibHandle, screen_state: &ScreenState) -> ScreenState {
     if rl.is_mouse_button_pressed(MOUSE_LEFT_BUTTON) {
         return match screen_state {
