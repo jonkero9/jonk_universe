@@ -63,7 +63,6 @@ use std::collections::HashMap;
 use std::ops::Not;
 use std::time::Instant;
 use u_gen::factory;
-use ui::uni_map_window;
 use ui::uni_map_window::UniMapWindow;
 
 pub mod game_color;
@@ -118,12 +117,7 @@ fn main() {
                     &mut uni_map_window.global_pos,
                     (128. * rl.get_frame_time()) / (uni_map_window.sec_size / 16.),
                 );
-                if let Some(star) = handle_select_star_unimap(
-                    &rl,
-                    &star_map,
-                    &uni_map_window.global_pos,
-                    uni_map_window.sec_size as i32,
-                ) {
+                if let Some(star) = handle_select_star_unimap(&rl, &star_map, &uni_map_window) {
                     selected_star = Some(star.clone());
                 };
                 uni_map_window.uni_map_debug_info =
@@ -139,13 +133,7 @@ fn main() {
 
         match screen_state {
             ScreenState::UniMap => {
-                handle_uni_map_draw(
-                    n_sectors,
-                    &mut uni_map_window.global_pos,
-                    &star_map,
-                    uni_map_window.sec_size,
-                    &mut draw,
-                );
+                handle_uni_map_draw(n_sectors, &star_map, &mut draw, &uni_map_window);
                 draw_uni_debug_widget(n_sectors, timer, &uni_map_window, &mut draw)
             }
             ScreenState::StarSystemMap => {
@@ -160,14 +148,15 @@ fn main() {
 fn handle_select_star_unimap<'a>(
     rl: &RaylibHandle,
     star_map: &'a HashMap<u64, StarSystem>,
-    global_pos: &Vector2DF,
-    sec_size: i32,
+    uni_map_window: &UniMapWindow,
 ) -> Option<&'a StarSystem> {
     if rl.is_mouse_button_pressed(MOUSE_LEFT_BUTTON) {
-        let mouse_x = rl.get_mouse_x() / sec_size;
-        let mouse_y = rl.get_mouse_y() / sec_size;
-        let hash =
-            jonk_utils::cantor_hash(global_pos.x as i32 + mouse_x, global_pos.y as i32 + mouse_y);
+        let mouse_x = rl.get_mouse_x() / uni_map_window.sec_size as i32;
+        let mouse_y = rl.get_mouse_y() / uni_map_window.sec_size as i32;
+        let hash = jonk_utils::cantor_hash(
+            uni_map_window.global_pos.x as i32 + mouse_x,
+            uni_map_window.global_pos.y as i32 + mouse_y,
+        );
         return star_map.get(&hash);
     }
     None
@@ -175,33 +164,37 @@ fn handle_select_star_unimap<'a>(
 
 fn handle_uni_map_draw(
     n_sectors: Vector2DI,
-    global_pos: &mut Vector2DF,
     star_map: &HashMap<u64, StarSystem>,
-    sec_size: f32,
     draw: &mut RaylibDrawHandle,
+    uni_map_window: &UniMapWindow,
 ) {
     for y in 0..n_sectors.y {
         for x in 0..n_sectors.x {
             let global_sec = Vector2DI {
-                x: global_pos.x as i32 + x,
-                y: global_pos.y as i32 + y,
+                x: uni_map_window.global_pos.x as i32 + x,
+                y: uni_map_window.global_pos.y as i32 + y,
             };
             let hash_key = jonk_utils::cantor_hash(global_sec.x, global_sec.y);
             if let Some(star) = star_map.get(&hash_key) {
                 let sec_to_screen = Vector2DI {
-                    x: x * sec_size as i32,
-                    y: y * sec_size as i32,
+                    x: x * uni_map_window.sec_size as i32,
+                    y: y * uni_map_window.sec_size as i32,
                 };
                 draw.draw_circle(
-                    sec_to_screen.x + (sec_size / 2.) as i32,
-                    sec_to_screen.y + (sec_size / 2.) as i32,
-                    (star.radius / 2000.) * (sec_size / 2.),
+                    sec_to_screen.x + (uni_map_window.sec_size / 2.) as i32,
+                    sec_to_screen.y + (uni_map_window.sec_size / 2.) as i32,
+                    (star.radius / 2000.) * (uni_map_window.sec_size / 2.),
                     Color::from(star.star_color),
                 );
             }
         }
     }
-    handle_mouse_hover(&star_map, global_pos, draw, sec_size);
+    handle_mouse_hover(
+        &star_map,
+        &uni_map_window.global_pos,
+        draw,
+        uni_map_window.sec_size,
+    );
 }
 
 fn handle_zoom_unimap(rl: &RaylibHandle, sec_size: f32) -> f32 {
@@ -220,7 +213,7 @@ fn handle_zoom_unimap(rl: &RaylibHandle, sec_size: f32) -> f32 {
 
 fn handle_mouse_hover(
     star_map: &HashMap<u64, StarSystem>,
-    global_pos: &mut Vector2DF,
+    global_pos: &Vector2DF,
     draw: &mut RaylibDrawHandle,
     sec_size: f32,
 ) {
