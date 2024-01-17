@@ -78,11 +78,13 @@ pub struct VecI {
 }
 
 fn main() {
+    // Set up initial Objects
     let mut sec_size: f32 = 16.;
     let mut global_pos = Vector2 { x: 0., y: 0. };
     let mut selected_star: Option<StarSystem> = None;
     let mut screen_state = ScreenState::UniMap;
 
+    // initialize raylib object
     let (mut rl, thread) = raylib::init()
         .vsync()
         .resizable()
@@ -91,6 +93,7 @@ fn main() {
         .build();
     rl.set_target_fps(75);
 
+    // main game loop
     while !rl.window_should_close() {
         let timer = Instant::now();
 
