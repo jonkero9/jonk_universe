@@ -81,7 +81,6 @@ fn main() {
     let mut uni_map: UniMapWindow = UniMapWindow::new(16.);
     let mut selected_star: Option<StarSystem> = None;
     let mut screen_state = ScreenState::UniMap;
-    let mut uni_map_debug_info = false;
 
     // initialize raylib object
     let (mut rl, thread) = raylib::init()
@@ -126,7 +125,8 @@ fn main() {
                 ) {
                     selected_star = Some(star.clone());
                 };
-                uni_map_debug_info = handle_debug_info_window_key(uni_map_debug_info, &rl);
+                uni_map.uni_map_debug_info =
+                    handle_debug_info_window_key(uni_map.uni_map_debug_info, &rl);
             }
             ScreenState::StarSystemMap => {}
         }
@@ -148,7 +148,7 @@ fn main() {
                 draw_uni_debug_widget(
                     n_sectors,
                     timer,
-                    uni_map_debug_info,
+                    uni_map.uni_map_debug_info,
                     &mut draw,
                     uni_map.sec_size,
                     &uni_map.global_pos,
