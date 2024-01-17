@@ -1,4 +1,4 @@
-use crate::VecI;
+use crate::Vector2DI;
 
 use super::planet::Planet;
 
@@ -13,7 +13,7 @@ pub enum StarColor {
 
 #[derive(Debug, Clone)]
 pub struct StarSystem {
-    pub location: VecI,
+    pub location: Vector2DI,
     /// measured in solar radi, radius of the sun between (2000 - 1); 418,000 miles (696,000 kilometers)
     pub radius: f32,
     /// Total amount of energy emitted from a star per second (25 - 1)

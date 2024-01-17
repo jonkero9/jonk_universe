@@ -3,12 +3,12 @@ use crate::{
         planet::Planet,
         star_system::{StarColor, StarSystem},
     },
-    VecI,
+    Vector2DI,
 };
 use jonk_utils::Jrand;
 use std::collections::HashMap;
 
-pub fn new_universe(location: VecI, size: VecI) -> HashMap<u64, StarSystem> {
+pub fn new_universe(location: Vector2DI, size: Vector2DI) -> HashMap<u64, StarSystem> {
     let mut jonk_random = Jrand::new();
     let mut star_map: HashMap<u64, StarSystem> = HashMap::new();
     for x in location.x..(location.x + size.x) {
@@ -16,7 +16,7 @@ pub fn new_universe(location: VecI, size: VecI) -> HashMap<u64, StarSystem> {
             let hash_key = jonk_utils::cantor_hash(x, y);
             jonk_random.seed = hash_key;
             if jonk_random.rnd_range(0, 20) == 1 {
-                let star = new_star(VecI { x, y }, &mut jonk_random);
+                let star = new_star(Vector2DI { x, y }, &mut jonk_random);
                 star_map.insert(hash_key, star);
             }
         }
@@ -24,7 +24,7 @@ pub fn new_universe(location: VecI, size: VecI) -> HashMap<u64, StarSystem> {
     return star_map;
 }
 
-pub fn new_star(location: VecI, jonk_random: &mut Jrand) -> StarSystem {
+pub fn new_star(location: Vector2DI, jonk_random: &mut Jrand) -> StarSystem {
     let surf_temp = jonk_random.rnd_range_float(700.0, 25001.0);
     return StarSystem {
         radius: jonk_random.rnd_range_float(1.0, 2000.0),
@@ -44,7 +44,7 @@ pub fn new_star(location: VecI, jonk_random: &mut Jrand) -> StarSystem {
     };
 }
 
-fn generate_planets(location: VecI, jonk_random: &mut Jrand) -> Vec<Planet> {
+fn generate_planets(location: Vector2DI, jonk_random: &mut Jrand) -> Vec<Planet> {
     return (0..jonk_random.rnd_range(0, 13))
         .map(|_x| Planet {
             location,

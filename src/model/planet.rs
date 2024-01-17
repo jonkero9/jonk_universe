@@ -1,9 +1,9 @@
-use crate::VecI;
+use crate::Vector2DI;
 
 #[derive(Debug, Clone, Copy)]
 pub struct Planet {
     /// location within the universe (x,y)
-    pub location: VecI,
+    pub location: Vector2DI,
     /// distance is the semi-major axis in astronomical units (1 A.U. = 1.496 × 108 kilometers);
     pub distance_au: f32,
     /// radius of the planet in kilometers

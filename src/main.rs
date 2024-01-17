@@ -73,7 +73,7 @@ enum ScreenState {
 }
 
 #[derive(Debug, Clone, Copy)]
-pub struct VecI {
+pub struct Vector2DI {
     pub x: i32,
     pub y: i32,
 }
@@ -99,13 +99,13 @@ fn main() {
     while !rl.window_should_close() {
         let timer = Instant::now();
 
-        let n_sectors = VecI {
+        let n_sectors = Vector2DI {
             x: rl.get_screen_width() / sec_size as i32,
             y: rl.get_screen_height() / sec_size as i32,
         };
 
         let star_map: HashMap<u64, StarSystem> = factory::new_universe(
-            VecI {
+            Vector2DI {
                 x: global_pos.x as i32,
                 y: global_pos.y as i32,
             },
@@ -174,7 +174,7 @@ fn handle_select_star_unimap<'a>(
 }
 
 fn handle_uni_map_draw(
-    n_sectors: VecI,
+    n_sectors: Vector2DI,
     global_pos: &mut Vector2,
     star_map: &HashMap<u64, StarSystem>,
     sec_size: f32,
@@ -182,13 +182,13 @@ fn handle_uni_map_draw(
 ) {
     for y in 0..n_sectors.y {
         for x in 0..n_sectors.x {
-            let global_sec = VecI {
+            let global_sec = Vector2DI {
                 x: global_pos.x as i32 + x,
                 y: global_pos.y as i32 + y,
             };
             let hash_key = jonk_utils::cantor_hash(global_sec.x, global_sec.y);
             if let Some(star) = star_map.get(&hash_key) {
-                let sec_to_screen = VecI {
+                let sec_to_screen = Vector2DI {
                     x: x * sec_size as i32,
                     y: y * sec_size as i32,
                 };
@@ -307,7 +307,7 @@ fn handle_debug_info_window_key(debug_show_flag: bool, rl: &RaylibHandle) -> boo
 }
 
 fn draw_uni_debug_widget(
-    n_sectors: VecI,
+    n_sectors: Vector2DI,
     timer: Instant,
     uni_map_debug_info: bool,
     draw: &mut RaylibDrawHandle,
