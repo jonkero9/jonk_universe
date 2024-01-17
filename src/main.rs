@@ -95,7 +95,7 @@ fn main() {
     while !rl.window_should_close() {
         let timer = Instant::now();
 
-        let n_sectors = Vector2DI {
+        uni_map_window.n_sectors = Vector2DI {
             x: rl.get_screen_width() / uni_map_window.sec_size as i32,
             y: rl.get_screen_height() / uni_map_window.sec_size as i32,
         };
@@ -105,7 +105,7 @@ fn main() {
                 x: uni_map_window.global_pos.x as i32,
                 y: uni_map_window.global_pos.y as i32,
             },
-            n_sectors,
+            uni_map_window.n_sectors,
         );
 
         // Handle User Input
@@ -133,8 +133,8 @@ fn main() {
 
         match screen_state {
             ScreenState::UniMap => {
-                handle_uni_map_draw(n_sectors, &star_map, &mut draw, &uni_map_window);
-                draw_uni_debug_widget(n_sectors, timer, &uni_map_window, &mut draw)
+                handle_uni_map_draw(&star_map, &mut draw, &uni_map_window);
+                draw_uni_debug_widget(timer, &uni_map_window, &mut draw)
             }
             ScreenState::StarSystemMap => {
                 if let Some(pat) = &selected_star {
@@ -163,13 +163,12 @@ fn handle_select_star_unimap<'a>(
 }
 
 fn handle_uni_map_draw(
-    n_sectors: Vector2DI,
     star_map: &HashMap<u64, StarSystem>,
     draw: &mut RaylibDrawHandle,
     uni_map_window: &UniMapWindow,
 ) {
-    for y in 0..n_sectors.y {
-        for x in 0..n_sectors.x {
+    for y in 0..uni_map_window.n_sectors.y {
+        for x in 0..uni_map_window.n_sectors.x {
             let global_sec = Vector2DI {
                 x: uni_map_window.global_pos.x as i32 + x,
                 y: uni_map_window.global_pos.y as i32 + y,
@@ -189,12 +188,7 @@ fn handle_uni_map_draw(
             }
         }
     }
-    handle_mouse_hover(
-        &star_map,
-        &uni_map_window.global_pos,
-        draw,
-        uni_map_window.sec_size,
-    );
+    handle_mouse_hover(&star_map, draw, uni_map_window);
 }
 
 fn handle_zoom_unimap(rl: &RaylibHandle, sec_size: f32) -> f32 {
@@ -213,13 +207,12 @@ fn handle_zoom_unimap(rl: &RaylibHandle, sec_size: f32) -> f32 {
 
 fn handle_mouse_hover(
     star_map: &HashMap<u64, StarSystem>,
-    global_pos: &Vector2DF,
     draw: &mut RaylibDrawHandle,
-    sec_size: f32,
+    uni_map_window: &UniMapWindow,
 ) {
     if let Some(star) = star_map.get(&jonk_utils::cantor_hash(
-        global_pos.x as i32 + (draw.get_mouse_x() / sec_size as i32),
-        global_pos.y as i32 + (draw.get_mouse_y() / sec_size as i32),
+        uni_map_window.global_pos.x as i32 + (draw.get_mouse_x() / uni_map_window.sec_size as i32),
+        uni_map_window.global_pos.y as i32 + (draw.get_mouse_y() / uni_map_window.sec_size as i32),
     )) {
         draw_debug_star_menu(star, draw);
     }
@@ -299,23 +292,21 @@ fn handle_debug_info_window_key(debug_show_flag: bool, rl: &RaylibHandle) -> boo
     return debug_show_flag;
 }
 
-fn draw_uni_debug_widget(
-    n_sectors: Vector2DI,
-    timer: Instant,
-    uni_map_window: &UniMapWindow,
-    draw: &mut RaylibDrawHandle,
-) {
+fn draw_uni_debug_widget(timer: Instant, uni_map_win: &UniMapWindow, draw: &mut RaylibDrawHandle) {
     let elasped = timer.elapsed().as_secs_f64();
-    if uni_map_window.uni_map_debug_info {
+    if uni_map_win.uni_map_debug_info {
         draw_lines(
             draw,
             vec![
-                &format!("nsecs: {}, {}", n_sectors.x, n_sectors.y),
+                &format!(
+                    "nsecs: {}, {}",
+                    uni_map_win.n_sectors.x, uni_map_win.n_sectors.y
+                ),
                 &format!("run time seconds: {:.6}", elasped),
-                &format!("Zoom: {:.2} ", uni_map_window.sec_size),
+                &format!("Zoom: {:.2} ", uni_map_win.sec_size),
                 &format!(
                     "Sector: {}, {}",
-                    uni_map_window.global_pos.x, uni_map_window.global_pos.y
+                    uni_map_win.global_pos.x, uni_map_win.global_pos.y
                 ),
             ],
             32,
