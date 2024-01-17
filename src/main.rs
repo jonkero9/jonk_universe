@@ -139,21 +139,14 @@ fn main() {
         match screen_state {
             ScreenState::UniMap => {
                 handle_uni_map_draw(n_sectors, &mut global_pos, &star_map, sec_size, &mut draw);
-                let elasped = timer.elapsed().as_secs_f64();
-                if uni_map_debug_info {
-                    draw_lines(
-                        &mut draw,
-                        vec![
-                            &format!("nsecs: {}, {}", n_sectors.x, n_sectors.y),
-                            &format!("run time seconds: {:.6}", elasped),
-                            &format!("Zoom: {:.2} ", sec_size),
-                            &format!("Sector: {}, {}", global_pos.x, global_pos.y),
-                        ],
-                        32,
-                        12,
-                        12,
-                    );
-                }
+                draw_uni_debug_widget(
+                    n_sectors,
+                    timer,
+                    uni_map_debug_info,
+                    &mut draw,
+                    sec_size,
+                    &global_pos,
+                )
             }
             ScreenState::StarSystemMap => {
                 if let Some(pat) = &selected_star {
@@ -311,4 +304,29 @@ fn handle_debug_info_window_key(debug_show_flag: bool, rl: &RaylibHandle) -> boo
         return debug_show_flag.not();
     }
     return debug_show_flag;
+}
+
+fn draw_uni_debug_widget(
+    n_sectors: VecI,
+    timer: Instant,
+    uni_map_debug_info: bool,
+    draw: &mut RaylibDrawHandle,
+    sec_size: f32,
+    global_pos: &Vector2,
+) {
+    let elasped = timer.elapsed().as_secs_f64();
+    if uni_map_debug_info {
+        draw_lines(
+            draw,
+            vec![
+                &format!("nsecs: {}, {}", n_sectors.x, n_sectors.y),
+                &format!("run time seconds: {:.6}", elasped),
+                &format!("Zoom: {:.2} ", sec_size),
+                &format!("Sector: {}, {}", global_pos.x, global_pos.y),
+            ],
+            32,
+            12,
+            12,
+        );
+    }
 }
