@@ -25,11 +25,11 @@
 //  ⣿⡿⠋⠁⠀⠀⢀⣀⣠⡴⣸⣿⣇⡄⠀⠀⠀⠀⢀⡿⠄⠙⠛⠀⣀⣠⣤⣤⠄⠀
 use model::star_system::StarSystem;
 use model::vectors::Vector2DI;
-use raylib::consts::MouseButton::*;
 use raylib::prelude::*;
 use std::collections::HashMap;
 use std::time::Instant;
 use u_gen::factory;
+use ui::main_window::{MainWindow, ScreenState};
 use ui::uni_map_controller;
 use ui::uni_map_window::UniMapWindow;
 
@@ -38,17 +38,11 @@ pub mod model;
 pub mod u_gen;
 pub mod ui;
 
-#[derive(Debug, Clone)]
-enum ScreenState {
-    UniMap,
-    StarSystemMap,
-}
-
 fn main() {
     // Set up initial Objects
     let mut uni_map_window: UniMapWindow = UniMapWindow::new(16.);
     let mut selected_star: Option<StarSystem> = None;
-    let mut screen_state = ScreenState::UniMap;
+    let mut main_window: MainWindow = MainWindow::new();
 
     // initialize raylib object
     let (mut rl, thread) = raylib::init()
@@ -70,14 +64,13 @@ fn main() {
             },
             uni_map_window.n_sectors,
         );
-
         uni_map_window.n_sectors = Vector2DI {
             x: rl.get_screen_width() / uni_map_window.sec_size as i32,
             y: rl.get_screen_height() / uni_map_window.sec_size as i32,
         };
 
         // Handle User Input
-        match screen_state {
+        match main_window.screen_state {
             ScreenState::UniMap => {
                 uni_map_controller::handle_uni_map_input(&rl, &mut uni_map_window);
                 if let Some(star) =
@@ -88,44 +81,20 @@ fn main() {
             }
             ScreenState::StarSystemMap => {}
         }
-        screen_state = handle_screen_state_click(&rl, &screen_state);
+        main_window.screen_state =
+            MainWindow::handle_screen_state_click(&rl, &main_window.screen_state);
 
         // Begin Draw
         let mut draw = rl.begin_drawing(&thread);
         draw.clear_background(Color::BLACK);
 
-        match screen_state {
-            ScreenState::UniMap => 
-                uni_map_window.draw(&star_map, timer, &mut draw), 
+        match main_window.screen_state {
+            ScreenState::UniMap => uni_map_window.draw(&star_map, timer, &mut draw),
             ScreenState::StarSystemMap => {
                 if let Some(_pat) = &selected_star {
                     //todo
                 }
             }
         }
-    }
-}
-
-fn handle_screen_state_click(rl: &RaylibHandle, screen_state: &ScreenState) -> ScreenState {
-    match screen_state {
-        ScreenState::UniMap => {
-            if rl.is_mouse_button_pressed(MOUSE_LEFT_BUTTON) {
-                return swap_screen_state(screen_state);
-            }
-            screen_state.clone()
-        }
-        ScreenState::StarSystemMap => {
-            if rl.is_mouse_button_pressed(MOUSE_RIGHT_BUTTON) {
-                return swap_screen_state(screen_state);
-            }
-            screen_state.clone()
-        }
-    }
-}
-
-fn swap_screen_state(screen_state: &ScreenState) -> ScreenState {
-    match screen_state {
-        ScreenState::UniMap => ScreenState::StarSystemMap,
-        ScreenState::StarSystemMap => ScreenState::UniMap,
     }
 }
