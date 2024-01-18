@@ -7,7 +7,7 @@ use raylib::RaylibHandle;
 use std::collections::HashMap;
 use std::ops::Not;
 
-pub fn handle_uni_map_input(rl: &RaylibHandle, uni_map_window: &mut UniMapWindow) -> f32 {
+pub fn handle_uni_map_input(rl: &RaylibHandle, uni_map_window: &mut UniMapWindow) {
     uni_map_window.sec_size = handle_zoom_unimap(rl, uni_map_window.sec_size);
     handle_key_press_unimap(
         rl,
@@ -16,7 +16,6 @@ pub fn handle_uni_map_input(rl: &RaylibHandle, uni_map_window: &mut UniMapWindow
     );
     uni_map_window.uni_map_debug_info =
         handle_debug_info_window_key(uni_map_window.uni_map_debug_info, rl);
-    0.0
 }
 
 fn handle_zoom_unimap(rl: &RaylibHandle, sec_size: f32) -> f32 {
