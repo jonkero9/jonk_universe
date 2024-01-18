@@ -13,13 +13,13 @@ pub struct Gamecolors {
 
 impl From<StarColor> for Color {
     fn from(value: StarColor) -> Self {
-        return match value {
+        match value {
             StarColor::Red => COLORS.red,
             StarColor::Orange => COLORS.orange,
             StarColor::Yellow => COLORS.yellow,
             StarColor::White => COLORS.white,
             StarColor::Blue => COLORS.blue,
-        };
+        }
     }
 }
 

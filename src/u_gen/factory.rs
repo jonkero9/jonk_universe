@@ -21,12 +21,12 @@ pub fn new_universe(location: Vector2DI, size: Vector2DI) -> HashMap<u64, StarSy
             }
         }
     }
-    return star_map;
+    star_map
 }
 
 pub fn new_star(location: Vector2DI, jonk_random: &mut Jrand) -> StarSystem {
     let surf_temp = jonk_random.rnd_range_float(700.0, 25001.0);
-    return StarSystem {
+    StarSystem {
         radius: jonk_random.rnd_range_float(1.0, 2000.0),
         luminosity: jonk_random.rnd_range_float(1.0, 25.0),
         surface_temp: surf_temp,
@@ -41,11 +41,11 @@ pub fn new_star(location: Vector2DI, jonk_random: &mut Jrand) -> StarSystem {
         },
         location,
         planets: generate_planets(location, jonk_random),
-    };
+    }
 }
 
 fn generate_planets(location: Vector2DI, jonk_random: &mut Jrand) -> Vec<Planet> {
-    return (0..jonk_random.rnd_range(0, 13))
+    (0..jonk_random.rnd_range(0, 13))
         .map(|_x| Planet {
             location,
             distance_au: jonk_random.rnd_range_float(0.0044, 5.),
@@ -57,5 +57,5 @@ fn generate_planets(location: Vector2DI, jonk_random: &mut Jrand) -> Vec<Planet>
             mass: jonk_random.rnd_range_float(1000., 2000000.),
             density: jonk_random.rnd_range_float(1000., 2000000.),
         })
-        .collect();
+        .collect()
 }

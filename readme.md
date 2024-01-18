@@ -40,5 +40,6 @@
 
 - add nerd font
 
-- move universe gen to in memory`
+- UI library
 
+- finish star sector map window

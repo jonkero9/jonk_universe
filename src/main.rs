@@ -54,15 +54,13 @@
 
 use game_color::COLORS;
 use model::star_system::StarSystem;
-use model::vectors::Vector2DF;
 use model::vectors::Vector2DI;
-use raylib::consts::KeyboardKey::*;
 use raylib::consts::MouseButton::*;
 use raylib::prelude::*;
 use std::collections::HashMap;
-use std::ops::Not;
 use std::time::Instant;
 use u_gen::factory;
+use ui::uni_map_controller;
 use ui::uni_map_window::UniMapWindow;
 
 pub mod game_color;
@@ -95,11 +93,6 @@ fn main() {
     while !rl.window_should_close() {
         let timer = Instant::now();
 
-        uni_map_window.n_sectors = Vector2DI {
-            x: rl.get_screen_width() / uni_map_window.sec_size as i32,
-            y: rl.get_screen_height() / uni_map_window.sec_size as i32,
-        };
-
         let star_map: HashMap<u64, StarSystem> = factory::new_universe(
             Vector2DI {
                 x: uni_map_window.global_pos.x as i32,
@@ -111,17 +104,16 @@ fn main() {
         // Handle User Input
         match screen_state {
             ScreenState::UniMap => {
-                uni_map_window.sec_size = handle_zoom_unimap(&rl, uni_map_window.sec_size);
-                handle_key_press_unimap(
-                    &rl,
-                    &mut uni_map_window.global_pos,
-                    (128. * rl.get_frame_time()) / (uni_map_window.sec_size / 16.),
-                );
-                if let Some(star) = handle_select_star_unimap(&rl, &star_map, &uni_map_window) {
+                uni_map_window.n_sectors = Vector2DI {
+                    x: rl.get_screen_width() / uni_map_window.sec_size as i32,
+                    y: rl.get_screen_height() / uni_map_window.sec_size as i32,
+                };
+                uni_map_controller::handle_uni_map_input(&rl, &mut uni_map_window);
+                if let Some(star) =
+                    uni_map_controller::handle_select_star_unimap(&rl, &star_map, &uni_map_window)
+                {
                     selected_star = Some(star.clone());
                 };
-                uni_map_window.uni_map_debug_info =
-                    handle_debug_info_window_key(uni_map_window.uni_map_debug_info, &rl);
             }
             ScreenState::StarSystemMap => {}
         }
@@ -138,28 +130,11 @@ fn main() {
             }
             ScreenState::StarSystemMap => {
                 if let Some(pat) = &selected_star {
-                    draw_debug_star_menu(&pat, &mut draw);
+                    draw_debug_star_menu(pat, &mut draw);
                 }
             }
         }
     }
-}
-
-fn handle_select_star_unimap<'a>(
-    rl: &RaylibHandle,
-    star_map: &'a HashMap<u64, StarSystem>,
-    uni_map_window: &UniMapWindow,
-) -> Option<&'a StarSystem> {
-    if rl.is_mouse_button_pressed(MOUSE_LEFT_BUTTON) {
-        let mouse_x = rl.get_mouse_x() / uni_map_window.sec_size as i32;
-        let mouse_y = rl.get_mouse_y() / uni_map_window.sec_size as i32;
-        let hash = jonk_utils::cantor_hash(
-            uni_map_window.global_pos.x as i32 + mouse_x,
-            uni_map_window.global_pos.y as i32 + mouse_y,
-        );
-        return star_map.get(&hash);
-    }
-    None
 }
 
 fn handle_uni_map_draw(
@@ -188,21 +163,7 @@ fn handle_uni_map_draw(
             }
         }
     }
-    handle_mouse_hover(&star_map, draw, uni_map_window);
-}
-
-fn handle_zoom_unimap(rl: &RaylibHandle, sec_size: f32) -> f32 {
-    let zoom_sen = sec_size * rl.get_frame_time();
-    if rl.is_key_down(KEY_E) {
-        return sec_size + zoom_sen;
-    }
-    if rl.is_key_down(KEY_Q) {
-        return match sec_size > 6. {
-            true => sec_size - zoom_sen,
-            false => sec_size,
-        };
-    }
-    return sec_size;
+    handle_mouse_hover(star_map, draw, uni_map_window);
 }
 
 fn handle_mouse_hover(
@@ -241,28 +202,13 @@ fn draw_lines(draw: &mut RaylibDrawHandle, lines: Vec<&String>, f_size: i32, s_x
     let mut start_y = s_y;
     draw.draw_rectangle(s_x, start_y, 540, f_size * lines.len() as i32, COLORS.bg);
     for s in lines {
-        draw.draw_text(&s, s_x, start_y, f_size, Color::WHITE);
+        draw.draw_text(s, s_x, start_y, f_size, Color::WHITE);
         start_y += f_size;
     }
 }
 
-fn handle_key_press_unimap(rl: &RaylibHandle, global_pos: &mut Vector2DF, sensitivity: f32) {
-    if rl.is_key_down(KEY_W) {
-        global_pos.y -= sensitivity;
-    }
-    if rl.is_key_down(KEY_D) {
-        global_pos.x += sensitivity;
-    }
-    if rl.is_key_down(KEY_S) {
-        global_pos.y += sensitivity;
-    }
-    if rl.is_key_down(KEY_A) {
-        global_pos.x -= sensitivity;
-    }
-}
-
 fn handle_screen_state_click(rl: &RaylibHandle, screen_state: &ScreenState) -> ScreenState {
-    return match screen_state {
+    match screen_state {
         ScreenState::UniMap => {
             if rl.is_mouse_button_pressed(MOUSE_LEFT_BUTTON) {
                 return swap_screen_state(screen_state);
@@ -275,21 +221,14 @@ fn handle_screen_state_click(rl: &RaylibHandle, screen_state: &ScreenState) -> S
             }
             screen_state.clone()
         }
-    };
+    }
 }
 
 fn swap_screen_state(screen_state: &ScreenState) -> ScreenState {
-    return match screen_state {
+    match screen_state {
         ScreenState::UniMap => ScreenState::StarSystemMap,
         ScreenState::StarSystemMap => ScreenState::UniMap,
-    };
-}
-
-fn handle_debug_info_window_key(debug_show_flag: bool, rl: &RaylibHandle) -> bool {
-    if rl.is_key_pressed(KEY_TAB) {
-        return debug_show_flag.not();
     }
-    return debug_show_flag;
 }
 
 fn draw_uni_debug_widget(timer: Instant, uni_map_win: &UniMapWindow, draw: &mut RaylibDrawHandle) {
