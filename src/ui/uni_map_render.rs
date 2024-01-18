@@ -12,14 +12,14 @@ use super::utils;
 
 impl UniMapWindow {
     pub fn draw(
+        &self,
         star_map: &HashMap<u64, StarSystem>,
         timer: Instant,
         draw: &mut RaylibDrawHandle,
-        uni_map_window: &UniMapWindow,
     ) {
-        handle_uni_map_draw(&star_map, draw, &uni_map_window);
-        draw_uni_debug_widget(timer, &uni_map_window, draw);
-        handle_mouse_hover(&star_map, draw, &uni_map_window);
+        handle_uni_map_draw(&star_map, draw, &self);
+        draw_uni_debug_widget(timer, &self, draw);
+        handle_mouse_hover(&star_map, draw, &self);
     }
 }
 

@@ -23,7 +23,6 @@
 //  ⣿⣿⣿⣿⣿⣿⣿⣿⡿⠛⣿⣿⠀⠀⠀⠀⠀⠀⠀⠀⢐⣿⣿⣿⣿⣿⣿⣿⣿⣿
 //  ⣿⣿⣿⣿⠿⠛⠉⠉⠁⠀⢻⣿⡇⠀⠀⠀⠀⠀⠀⢀⠈⣿⣿⡿⠉⠛⠛⠛⠉⠉
 //  ⣿⡿⠋⠁⠀⠀⢀⣀⣠⡴⣸⣿⣇⡄⠀⠀⠀⠀⢀⡿⠄⠙⠛⠀⣀⣠⣤⣤⠄⠀
-use game_color::COLORS;
 use model::star_system::StarSystem;
 use model::vectors::Vector2DI;
 use raylib::consts::MouseButton::*;
@@ -31,8 +30,8 @@ use raylib::prelude::*;
 use std::collections::HashMap;
 use std::time::Instant;
 use u_gen::factory;
-use ui::uni_map_window::UniMapWindow;
 use ui::uni_map_controller;
+use ui::uni_map_window::UniMapWindow;
 
 pub mod game_color;
 pub mod model;
@@ -96,12 +95,13 @@ fn main() {
         draw.clear_background(Color::BLACK);
 
         match screen_state {
-            ScreenState::UniMap => {
-                UniMapWindow::draw(&star_map, timer, &mut draw, &uni_map_window);
+            ScreenState::UniMap => 
+                uni_map_window.draw(&star_map, timer, &mut draw), 
+            ScreenState::StarSystemMap => {
+                if let Some(_pat) = &selected_star {
+                    //todo
+                }
             }
-            ScreenState::StarSystemMap => if let Some(_pat) = &selected_star {
-                //todo
-            },
         }
     }
 }
@@ -129,5 +129,3 @@ fn swap_screen_state(screen_state: &ScreenState) -> ScreenState {
         ScreenState::StarSystemMap => ScreenState::UniMap,
     }
 }
-
-
