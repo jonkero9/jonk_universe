@@ -79,7 +79,7 @@ fn main() {
             ScreenState::StarSystemMap => {}
         }
         main_window.screen_state =
-            MainWindow::handle_screen_state_click(&rl, &main_window.screen_state);
+            main_window.handle_screen_state_click(&rl);
 
         // Begin Draw
         let mut draw = rl.begin_drawing(&thread);
