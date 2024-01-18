@@ -43,3 +43,5 @@
 - UI library
 
 - finish star sector map window
+
+https://www.youtube.com/watch?v=jTpK-bNZiA4

@@ -65,22 +65,29 @@ fn handle_mouse_hover(
 }
 
 fn draw_debug_star_menu(star: &StarSystem, draw: &mut RaylibDrawHandle) {
-    let lines = vec![
-        format!("Radius: {:.2}", star.radius),
-        format!("Luminosity: {:.2} lums", star.luminosity),
-        format!("Temp: {:.2}K", star.surface_temp),
-        format!("Mass: {:.2} Solar masses", star.mass),
-        format!("Planets: {}", star.planets.len()),
-        format!("Color: {:?}", star.star_color),
-        format!("location: {}, {}", star.location.x, star.location.y),
+    let mut lines = vec![
+        (
+            format!("Star: {}, {}", star.location.x, star.location.y),
+            Color::GREEN,
+        ),
+        (format!("Radius: {:.2}", star.radius), Color::WHITE),
+        (
+            format!("Luminosity: {:.2} lums", star.luminosity),
+            Color::WHITE,
+        ),
+        (format!("Temp: {:.2}K", star.surface_temp), Color::WHITE),
+        (format!("Mass: {:.2} Solar masses", star.mass), Color::WHITE),
+        (format!("Planets: {}", star.planets.len()), Color::WHITE),
+        (format!("Color: {:?}", star.star_color), Color::WHITE),
     ];
-    let planet_lines: Vec<String> = star
+    let planet_lines: Vec<(String, Color)> = star
         .planets
         .iter()
-        .map(|p| format!(" planet : {}", p.mass))
+        .map(|p| (format!(" planet : {}", p.mass), Color::WHITE))
         .collect();
-    let collect: Vec<&String> = lines.iter().chain(planet_lines.iter()).collect();
-    utils::draw_lines(draw, collect, 32, 12, 160);
+
+    lines.extend(planet_lines);
+    utils::draw_lines(draw, lines, 32, 12, 160);
 }
 
 fn draw_uni_debug_widget(timer: Instant, uni_map_win: &UniMapWindow, draw: &mut RaylibDrawHandle) {
@@ -89,15 +96,21 @@ fn draw_uni_debug_widget(timer: Instant, uni_map_win: &UniMapWindow, draw: &mut 
         utils::draw_lines(
             draw,
             vec![
-                &format!(
-                    "nsecs: {}, {}",
-                    uni_map_win.n_sectors.x, uni_map_win.n_sectors.y
+                (
+                    format!(
+                        "nsecs: {}, {}",
+                        uni_map_win.n_sectors.x, uni_map_win.n_sectors.y
+                    ),
+                    Color::WHITE,
                 ),
-                &format!("run time seconds: {:.6}", elasped),
-                &format!("Zoom: {:.2} ", uni_map_win.sec_size),
-                &format!(
-                    "Sector: {}, {}",
-                    uni_map_win.global_pos.x, uni_map_win.global_pos.y
+                (format!("run time seconds: {:.6}", elasped), Color::WHITE),
+                (format!("Zoom: {:.2} ", uni_map_win.sec_size), Color::WHITE),
+                (
+                    format!(
+                        "Sector: {}, {}",
+                        uni_map_win.global_pos.x, uni_map_win.global_pos.y
+                    ),
+                    Color::WHITE,
                 ),
             ],
             32,
