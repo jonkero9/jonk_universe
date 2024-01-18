@@ -30,7 +30,6 @@ use std::collections::HashMap;
 use std::time::Instant;
 use u_gen::factory;
 use ui::main_window::{MainWindow, ScreenState};
-use ui::uni_map_controller;
 use ui::uni_map_window::UniMapWindow;
 
 pub mod game_color;
@@ -72,10 +71,8 @@ fn main() {
         // Handle User Input
         match main_window.screen_state {
             ScreenState::UniMap => {
-                uni_map_controller::handle_uni_map_input(&rl, &mut uni_map_window);
-                if let Some(star) =
-                    uni_map_controller::handle_select_star_unimap(&rl, &star_map, &uni_map_window)
-                {
+                uni_map_window.handle_uni_map_input(&rl);
+                if let Some(star) = uni_map_window.handle_select_star_unimap(&rl, &star_map) {
                     selected_star = Some(star.clone());
                 };
             }
