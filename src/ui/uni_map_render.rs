@@ -87,7 +87,7 @@ fn draw_debug_star_menu(star: &StarSystem, draw: &mut RaylibDrawHandle) {
         .collect();
 
     lines.extend(planet_lines);
-    utils::draw_lines(draw, lines, 32, 12, 160);
+    utils::draw_lines(draw, lines, 32, Vector2DI { x: 12, y: 160 });
 }
 
 fn draw_uni_debug_widget(timer: Instant, uni_map_win: &UniMapWindow, draw: &mut RaylibDrawHandle) {
@@ -114,8 +114,7 @@ fn draw_uni_debug_widget(timer: Instant, uni_map_win: &UniMapWindow, draw: &mut 
                 ),
             ],
             32,
-            12,
-            12,
+            Vector2DI { x: 12, y: 12 },
         );
     }
 }
