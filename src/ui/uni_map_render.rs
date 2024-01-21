@@ -5,9 +5,9 @@ use raylib::{
     drawing::{RaylibDraw, RaylibDrawHandle},
 };
 
-use crate::{
-    game_color::COLORS,
-    model::{star_system::StarSystem, vectors::Vector2DI},
+use crate::model::{
+    star_system::StarSystem,
+    vectors::{Vector2DF, Vector2DI},
 };
 
 use super::uni_map_window::UniMapWindow;
@@ -69,28 +69,23 @@ fn handle_mouse_hover(
 
 fn draw_debug_star_menu(star: &StarSystem, draw: &mut RaylibDrawHandle) {
     let mut lines = vec![
-        (
-            format!("Star: {}, {}", star.location.x, star.location.y),
-            COLORS.green,
-        ),
-        (format!("Radius: {:.2}", star.radius), Color::WHITE),
-        (
-            format!("Luminosity: {:.2} lums", star.luminosity),
-            Color::WHITE,
-        ),
-        (format!("Temp: {:.2}K", star.surface_temp), Color::WHITE),
-        (format!("Mass: {:.2} Solar masses", star.mass), Color::WHITE),
-        (format!("Planets: {}", star.planets.len()), Color::WHITE),
-        (format!("Color: {:?}", star.star_color), Color::WHITE),
+        format!("Star: {}, {}", star.location.x, star.location.y),
+        format!("Radius: {:.2}", star.radius),
+        format!("Luminosity: {:.2} lums", star.luminosity),
+        format!("Temp: {:.2}K", star.surface_temp),
+        format!("Mass: {:.2} Solar masses", star.mass),
+        format!("Planets: {}", star.planets.len()),
+        format!("Color: {:?}", star.star_color),
     ];
-    let planet_lines: Vec<(String, Color)> = star
+    let planet_lines: Vec<String> = star
         .planets
         .iter()
-        .map(|p| (format!(" planet : {}", p.mass), Color::WHITE))
+        .map(|p| format!(" planet : {}", p.mass))
         .collect();
 
     lines.extend(planet_lines);
-    utils::draw_lines(draw, lines, 32, Vector2DI { x: 12, y: 160 });
+
+    utils::draw_lines(draw, lines, Vector2DF { x: 12., y: 160. });
 }
 
 fn draw_uni_debug_widget(timer: Instant, uni_map_win: &UniMapWindow, draw: &mut RaylibDrawHandle) {
@@ -99,25 +94,18 @@ fn draw_uni_debug_widget(timer: Instant, uni_map_win: &UniMapWindow, draw: &mut 
         utils::draw_lines(
             draw,
             vec![
-                (
-                    format!(
-                        "nsecs: {}, {}",
-                        uni_map_win.n_sectors.x, uni_map_win.n_sectors.y
-                    ),
-                    Color::WHITE,
+                format!(
+                    "nsecs: {}, {}",
+                    uni_map_win.n_sectors.x, uni_map_win.n_sectors.y
                 ),
-                (format!("run time seconds: {:.6}", elasped), Color::WHITE),
-                (format!("Zoom: {:.2} ", uni_map_win.sec_size), Color::WHITE),
-                (
-                    format!(
-                        "Sector: {}, {}",
-                        uni_map_win.global_pos.x, uni_map_win.global_pos.y
-                    ),
-                    Color::WHITE,
+                format!("run time seconds: {:.6}", elasped),
+                format!("Zoom: {:.2} ", uni_map_win.sec_size),
+                format!(
+                    "Sector: {}, {}",
+                    uni_map_win.global_pos.x, uni_map_win.global_pos.y
                 ),
             ],
-            32,
-            Vector2DI { x: 12, y: 12 },
+            Vector2DF { x: 12., y: 12. },
         );
     }
 }

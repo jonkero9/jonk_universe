@@ -1,3 +1,18 @@
+use game_color::COLORS;
+use model::star_system::StarSystem;
+use model::vectors::Vector2DI;
+use raylib::prelude::*;
+use std::collections::HashMap;
+use std::time::Instant;
+use u_gen::factory;
+use ui::main_window::{MainWindow, ScreenState};
+use ui::uni_map_window::UniMapWindow;
+
+pub mod game_color;
+pub mod model;
+pub mod u_gen;
+pub mod ui;
+
 //  ⣿⣿⣿⣿⣿⣿⣿⣿⡿⠿⠛⠛⠛⠋⠉⠈⠉⠉⠉⠉⠛⠻⢿⣿⣿⣿⣿⣿⣿⣿
 //  ⣿⣿⣿⣿⣿⡿⠋⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠛⢿⣿⣿⣿⣿
 //  ⣿⣿⣿⣿⡏⣀⠀⠀⠀⠀⠀⠀⠀⣀⣤⣤⣤⣄⡀⠀⠀⠀⠀⠀⠀⠀⠙⢿⣿⣿
@@ -23,19 +38,8 @@
 //  ⣿⣿⣿⣿⣿⣿⣿⣿⡿⠛⣿⣿⠀⠀⠀⠀⠀⠀⠀⠀⢐⣿⣿⣿⣿⣿⣿⣿⣿⣿
 //  ⣿⣿⣿⣿⠿⠛⠉⠉⠁⠀⢻⣿⡇⠀⠀⠀⠀⠀⠀⢀⠈⣿⣿⡿⠉⠛⠛⠛⠉⠉
 //  ⣿⡿⠋⠁⠀⠀⢀⣀⣠⡴⣸⣿⣇⡄⠀⠀⠀⠀⢀⡿⠄⠙⠛⠀⣀⣠⣤⣤⠄⠀
-use model::star_system::StarSystem;
-use model::vectors::Vector2DI;
-use raylib::prelude::*;
-use std::collections::HashMap;
-use std::time::Instant;
-use u_gen::factory;
-use ui::main_window::{MainWindow, ScreenState};
-use ui::uni_map_window::UniMapWindow;
 
-pub mod game_color;
-pub mod model;
-pub mod u_gen;
-pub mod ui;
+const FONT_SIZE: i32 = 32;
 
 fn main() {
     // Set up initial Objects
@@ -51,6 +55,23 @@ fn main() {
         .title("Jspace")
         .build();
     rl.set_target_fps(75);
+
+    // Set gui styles
+    rl.gui_set_style(
+        GuiControl::DEFAULT,
+        GuiDefaultProperty::TEXT_SIZE as i32,
+        FONT_SIZE,
+    );
+    rl.gui_set_style(
+        GuiControl::DEFAULT,
+        GuiControlProperty::TEXT_COLOR_NORMAL as i32,
+        COLORS.white.color_to_int(),
+    );
+    rl.gui_set_style(
+        GuiControl::DEFAULT,
+        GuiDefaultProperty::BACKGROUND_COLOR as i32,
+        COLORS.bg.color_to_int(),
+    );
 
     // main game loop
     while !rl.window_should_close() {

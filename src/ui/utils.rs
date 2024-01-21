@@ -1,28 +1,30 @@
-use raylib::{
-    color::Color,
-    drawing::{RaylibDraw, RaylibDrawHandle},
-};
+use std::ffi::CString;
 
-use crate::{game_color::COLORS, model::vectors::Vector2DI};
+use crate::{model::vectors::Vector2DF, FONT_SIZE};
+use raylib::{drawing::RaylibDrawHandle, ffi::Rectangle, rgui::RaylibDrawGui, text::measure_text};
 
-pub fn draw_lines(
-    draw: &mut RaylibDrawHandle,
-    lines: Vec<(String, Color)>,
-    f_size: i32,
-    start_pos: Vector2DI,
-) {
-    draw.draw_rectangle(
-        start_pos.x,
-        start_pos.y,
-        540,
-        32 + f_size * lines.len() as i32,
-        COLORS.bg,
+const MARGIN_SIZE: f32 = 16.;
+
+pub fn draw_lines(draw: &mut RaylibDrawHandle, lines: Vec<String>, start_pos: Vector2DF) {
+    let joined = lines.join("\n");
+    let width = measure_text(&joined, FONT_SIZE);
+
+    let bounds = Rectangle {
+        x: start_pos.x,
+        y: start_pos.y,
+        width: width as f32,
+        height: lines.len() as f32 * FONT_SIZE as f32 * 2.,
+    };
+
+    draw.gui_panel(bounds);
+
+    draw.gui_label(
+        Rectangle {
+            x: start_pos.x + MARGIN_SIZE,
+            y: start_pos.y + MARGIN_SIZE * 2.,
+            width: 1.,
+            height: 1.,
+        },
+        Some(&CString::new(joined).expect("")),
     );
-
-    let mut start_y = start_pos.y + 16;
-    let start_x = start_pos.x + 16;
-    for s in lines {
-        draw.draw_text(&s.0, start_x, start_y, f_size, s.1);
-        start_y += f_size;
-    }
 }
