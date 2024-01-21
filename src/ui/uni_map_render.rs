@@ -5,7 +5,10 @@ use raylib::{
     drawing::{RaylibDraw, RaylibDrawHandle},
 };
 
-use crate::model::{star_system::StarSystem, vectors::Vector2DI};
+use crate::{
+    game_color::COLORS,
+    model::{star_system::StarSystem, vectors::Vector2DI},
+};
 
 use super::uni_map_window::UniMapWindow;
 use super::utils;
@@ -68,7 +71,7 @@ fn draw_debug_star_menu(star: &StarSystem, draw: &mut RaylibDrawHandle) {
     let mut lines = vec![
         (
             format!("Star: {}, {}", star.location.x, star.location.y),
-            Color::GREEN,
+            COLORS.green,
         ),
         (format!("Radius: {:.2}", star.radius), Color::WHITE),
         (

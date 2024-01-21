@@ -4,6 +4,7 @@ use raylib::color::Color;
 #[derive(Debug)]
 pub struct Gamecolors {
     pub blue: Color,
+    pub green: Color,
     pub white: Color,
     pub yellow: Color,
     pub orange: Color,
@@ -58,6 +59,12 @@ pub static COLORS: Gamecolors = Gamecolors {
         r: 30,
         g: 30,
         b: 46,
+        a: 255,
+    },
+    green: Color {
+        r: 167,
+        g: 227,
+        b: 161,
         a: 255,
     },
 };
